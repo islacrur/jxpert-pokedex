@@ -1,35 +1,10 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import {  describe, expect, test } from 'vitest';
-import { UserEvent } from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 import { App } from '../App';
 
-/*describe('App Component', () => {
-  test('debería verse el nombre del pokemon cuando se cargan los datos', async () => {
-    const mockFetch = vi.fn();
-        globalThis.fetch = mockFetch;
-    
-        mockFetch
-          .mockResolvedValueOnce({
-            ok: true,
-            json: async () => ({
-              results: [
-                {
-                  name: "bulbasaur",
-                  url: "https://pokeapi.co/api/v2/pokemon/1/",
-                },
-              ]
-            }),
-          })
-          
-    
-    render(<App />);
-   const nombrePokemon = await screen.findByText('bulbasaur');
 
-   expect(nombrePokemon).toBeInTheDocument();
-  });
-});*/
-
-describe('App', () => {
+describe('App Component', () => {
   beforeEach(() => {
     const mockFetch = vi.fn();
     globalThis.fetch = mockFetch;
@@ -42,6 +17,10 @@ describe('App', () => {
           {
             name: 'bulbasaur',
             url: 'https://pokeapi.co/api/v2/pokemon/1/',
+          },
+          {
+            name: 'ivysaur',
+            url: 'https://pokeapi.co/api/v2/pokemon/2/',
           },
         ],
       }),
@@ -74,14 +53,51 @@ describe('App', () => {
         ],
       }),
     });
-  });
+  
 
-  it('debería renderizar Bulbasaur desde la API simulada', async () => {
-    render(<App />);
-
-    // Espera hasta que se muestre "bulbasaur"
-    await waitFor(() => {
-      expect(screen.getByText(/bulbasaur/i)).toBeInTheDocument();
+  mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        id: 2,
+        name: 'ivysaur',
+        sprites: {
+          other: {
+            'official-artwork': {
+              front_default: 'https://someimage.url/',
+            },
+          },
+        },
+        stats: [
+          { base_stat: 45, stat: { name: 'hp' } },
+          { base_stat: 49, stat: { name: 'attack' } },
+          { base_stat: 49, stat: { name: 'defense' } },
+          { base_stat: 65, stat: { name: 'special-attack' } },
+          { base_stat: 65, stat: { name: 'special-defense' } },
+          { base_stat: 45, stat: { name: 'speed' } },
+        ],
+        types: [
+          { type: { name: 'grass' } },
+          { type: { name: 'poison' } },
+        ],
+      }),
     });
   });
+
+  it('debería renderizar un nombre desde la API simulada', async () => {
+    render(<App />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/bulbasaur/i)).toBeInTheDocument();
+      expect(screen.getByText(/ivysaur/i)).toBeInTheDocument();
+    });
+  });
+
+  it('debería renderizar el filtrado por nombre', async () => {
+    render(<App />);
+    const placeholder = screen.getByPlaceholderText('Search a Pokémon...')
+    screen.debug(placeholder);
+    await userEvent.type(placeholder, 'ivysaur')
+  expect(screen.getByText(/bulbasaur/i)).toBeInTheDocument();
+      expect(screen.getByText(/ivysaur/i)).toBeInTheDocument();  });
+//not to be in document
 });
