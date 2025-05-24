@@ -12,13 +12,6 @@
     "lint-stage": "husky install",
     "build:ci": "yarn test && yarn build"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint",
-      "pre-push": "yarn test",
-      "commit-msg": "echo 'mensaje: ' $1"
-    }
-  },
   "engines": {
     "node": "22"
   },
