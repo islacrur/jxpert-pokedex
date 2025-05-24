@@ -2,14 +2,11 @@ name: Ejecutar Tests Automáticos
 
 on:
   pull_request:
-    branches:
+    branches: [ main ]
       
-main  # Cambia por develop u otra rama si es necesario
-
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       
 name: Checkout del código
@@ -23,8 +20,7 @@ name: Instalar Node.js
 
       
 name: Instalar dependencias
-      run: npm ci
-
+run: yarn install --frozen-lockfile
       
 name: Ejecutar tests
       run: yarn test
