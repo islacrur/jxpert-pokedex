@@ -92,7 +92,7 @@ describe('App Component', () => {
     });
   });
 
-  it.only('debería renderizar el filtrado por nombre', async () => {
+  it('debería renderizar el filtrado por nombre', async () => {
     render(<App />);
     const placeholder = screen.getByPlaceholderText('Search a Pokémon...')
     screen.debug(placeholder);
