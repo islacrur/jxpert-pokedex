@@ -98,8 +98,7 @@ describe('App Component', () => {
     screen.debug(placeholder);
     await userEvent.type(placeholder, 'ivysaur')
   //expect(screen.getByText(/bulbasaur/i)).toBeInTheDocument();
-      //expect(screen.getByText(/ivysaur/i)).toBeInTheDocument(); 
-      expect(false).toBe(false);
+      expect(screen.getByText(/ivysaur/i)).toBeInTheDocument(); 
      });
 //not to be in document
 });
