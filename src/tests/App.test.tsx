@@ -76,21 +76,27 @@ describe("App Component", () => {
   });
 
   it("debería renderizar un nombre desde la API simulada", async () => {
+    //Arrange
     render(<App />);
 
+    //Act
     await waitFor(() => {
+      //Assert
       expect(screen.getByText(/bulbasaur/i)).toBeInTheDocument();
       expect(screen.getByText(/ivysaur/i)).toBeInTheDocument();
     });
   });
 
   it("debería renderizar el filtrado por nombre", async () => {
+    //Arrange
     render(<App />);
+
+    //Act
     const placeholder = screen.getByPlaceholderText("Search a Pokémon...");
-    screen.debug(placeholder);
     await userEvent.type(placeholder, "ivysaur");
+
+    //Assert
     expect(screen.getByText(/ivysaur/i)).toBeInTheDocument();
     expect(screen.queryByText(/bulbasaur/i)).not.toBeInTheDocument();
   });
-  //not to be in document
 });
