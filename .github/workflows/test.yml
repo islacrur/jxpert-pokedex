@@ -1,0 +1,30 @@
+name: Ejecutar Tests Automáticos
+
+on:
+  pull_request:
+    branches:
+      
+main  # Cambia por develop u otra rama si es necesario
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      
+name: Checkout del código
+      uses: actions/checkout@v3
+
+      
+name: Instalar Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '22'  # Usa la versión de Node que necesitas
+
+      
+name: Instalar dependencias
+      run: npm ci
+
+      
+name: Ejecutar tests
+      run: yarn test
