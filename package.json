@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
-    "lint-stage": "husky install",
+    "prepare": "husky install",
+    "lint-staged": "lint-staged",
     "build:ci": "yarn test && yarn build"
   },
   "engines": {
