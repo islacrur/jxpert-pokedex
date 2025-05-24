@@ -100,6 +100,6 @@ describe('App Component', () => {
   //expect(screen.getByText(/bulbasaur/i)).toBeInTheDocument();
       expect(screen.getByText(/ivysaur/i)).toBeInTheDocument(); 
      });
-     expect(true).toBe(true);
+     expect(true).toBe(false);
 //not to be in document
 });
