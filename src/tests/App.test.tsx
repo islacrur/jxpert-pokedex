@@ -1,10 +1,9 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import {  describe, expect, test } from 'vitest';
-import userEvent from '@testing-library/user-event';
-import { App } from '../App';
+import { render, screen, waitFor } from "@testing-library/react";
+import { describe, expect } from "vitest";
+import userEvent from "@testing-library/user-event";
+import { App } from "../App";
 
-
-describe('App Component', () => {
+describe("App Component", () => {
   beforeEach(() => {
     const mockFetch = vi.fn();
     globalThis.fetch = mockFetch;
@@ -15,12 +14,12 @@ describe('App Component', () => {
       json: async () => ({
         results: [
           {
-            name: 'bulbasaur',
-            url: 'https://pokeapi.co/api/v2/pokemon/1/',
+            name: "bulbasaur",
+            url: "https://pokeapi.co/api/v2/pokemon/1/",
           },
           {
-            name: 'ivysaur',
-            url: 'https://pokeapi.co/api/v2/pokemon/2/',
+            name: "ivysaur",
+            url: "https://pokeapi.co/api/v2/pokemon/2/",
           },
         ],
       }),
@@ -31,59 +30,52 @@ describe('App Component', () => {
       ok: true,
       json: async () => ({
         id: 1,
-        name: 'bulbasaur',
+        name: "bulbasaur",
         sprites: {
           other: {
-            'official-artwork': {
-              front_default: 'https://someimage.url/',
+            "official-artwork": {
+              front_default: "https://someimage.url/",
             },
           },
         },
         stats: [
-          { base_stat: 45, stat: { name: 'hp' } },
-          { base_stat: 49, stat: { name: 'attack' } },
-          { base_stat: 49, stat: { name: 'defense' } },
-          { base_stat: 65, stat: { name: 'special-attack' } },
-          { base_stat: 65, stat: { name: 'special-defense' } },
-          { base_stat: 45, stat: { name: 'speed' } },
+          { base_stat: 45, stat: { name: "hp" } },
+          { base_stat: 49, stat: { name: "attack" } },
+          { base_stat: 49, stat: { name: "defense" } },
+          { base_stat: 65, stat: { name: "special-attack" } },
+          { base_stat: 65, stat: { name: "special-defense" } },
+          { base_stat: 45, stat: { name: "speed" } },
         ],
-        types: [
-          { type: { name: 'grass' } },
-          { type: { name: 'poison' } },
-        ],
+        types: [{ type: { name: "grass" } }, { type: { name: "poison" } }],
       }),
     });
-  
 
-  mockFetch.mockResolvedValueOnce({
+    mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({
         id: 2,
-        name: 'ivysaur',
+        name: "ivysaur",
         sprites: {
           other: {
-            'official-artwork': {
-              front_default: 'https://someimage.url/',
+            "official-artwork": {
+              front_default: "https://someimage.url/",
             },
           },
         },
         stats: [
-          { base_stat: 45, stat: { name: 'hp' } },
-          { base_stat: 49, stat: { name: 'attack' } },
-          { base_stat: 49, stat: { name: 'defense' } },
-          { base_stat: 65, stat: { name: 'special-attack' } },
-          { base_stat: 65, stat: { name: 'special-defense' } },
-          { base_stat: 45, stat: { name: 'speed' } },
+          { base_stat: 45, stat: { name: "hp" } },
+          { base_stat: 49, stat: { name: "attack" } },
+          { base_stat: 49, stat: { name: "defense" } },
+          { base_stat: 65, stat: { name: "special-attack" } },
+          { base_stat: 65, stat: { name: "special-defense" } },
+          { base_stat: 45, stat: { name: "speed" } },
         ],
-        types: [
-          { type: { name: 'grass' } },
-          { type: { name: 'poison' } },
-        ],
+        types: [{ type: { name: "grass" } }, { type: { name: "poison" } }],
       }),
     });
   });
 
-  it('debería renderizar un nombre desde la API simulada', async () => {
+  it("debería renderizar un nombre desde la API simulada", async () => {
     render(<App />);
 
     await waitFor(() => {
@@ -92,13 +84,14 @@ describe('App Component', () => {
     });
   });
 
-  it('debería renderizar el filtrado por nombre', async () => {
+  it("debería renderizar el filtrado por nombre", async () => {
     render(<App />);
-    const placeholder = screen.getByPlaceholderText('Search a Pokémon...')
+    const placeholder = screen.getByPlaceholderText("Search a Pokémon...");
     screen.debug(placeholder);
-    await userEvent.type(placeholder, 'ivysaur')
-  //expect(screen.getByText(/bulbasaur/i)).toBeInTheDocument();
-      expect(screen.getByText(/ivysaur/i)).toBeInTheDocument(); 
-     });
-//not to be in document
+    await userEvent.type(placeholder, "ivysaur");
+    //expect(screen.getByText(/bulbasaur/i)).toBeInTheDocument();
+    expect(screen.getByText(/ivysaur/i)).toBeInTheDocument();
+    expect(true).toBe(false);
+  });
+  //not to be in document
 });
