@@ -99,4 +99,15 @@ describe("App Component", () => {
     expect(screen.getByText(/ivysaur/i)).toBeInTheDocument();
     expect(screen.queryByText(/bulbasaur/i)).not.toBeInTheDocument();
   });
+
+  it("debería filtrar según la zona geográfica", async () => {
+    //Arrange
+    render(<App />);
+
+    //Act
+    const boton = screen.getByRole("button");
+    screen.debug(boton);
+
+    //Assert
+  });
 });
