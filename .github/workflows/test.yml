@@ -8,19 +8,16 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      
-name: Checkout del código
-      uses: actions/checkout@v3
+      - name: Checkout del código
+        uses: actions/checkout@v3
 
-      
-name: Instalar Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '22'  # Usa la versión de Node que necesitas
+      - name: Instalar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'  # Usa la versión de Node que necesitas
 
-      
-name: Instalar dependencias
-run: yarn install --frozen-lockfile
-      
-name: Ejecutar tests
-      run: yarn test
+      - name: Instalar dependencias
+        run: yarn install --frozen-lockfile
+
+      - name: Ejecutar tests
+        run: yarn test
