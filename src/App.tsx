@@ -45,6 +45,7 @@ const icns: any = {
 
 const regs = ['kanto', 'johto', 'hoenn', 'sinnoh', 'unova', 'kalos', 'alola', 'galar', 'paldea'];
 
+const prueba =  2
 
 export const App = () => {
   const [ldr, setLdr] = useState<any>(false);
