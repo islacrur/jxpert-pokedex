@@ -1,11 +1,13 @@
-name: Ejecutar Tests Automáticos
+name: PR-validate
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened]
     branches: [ main ]
       
 jobs:
   test:
+    name: test  # <--- Aquí va sin guion
     runs-on: ubuntu-latest
     steps:
       - name: Checkout del código
