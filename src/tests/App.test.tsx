@@ -89,9 +89,8 @@ describe("App Component", () => {
     const placeholder = screen.getByPlaceholderText("Search a Pokémon...");
     screen.debug(placeholder);
     await userEvent.type(placeholder, "ivysaur");
-    //expect(screen.getByText(/bulbasaur/i)).toBeInTheDocument();
     expect(screen.getByText(/ivysaur/i)).toBeInTheDocument();
-    expect(true).toBe(true);
+    expect(screen.queryByText(/bulbasaur/i)).not.toBeInTheDocument();
   });
   //not to be in document
 });
