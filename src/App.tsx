@@ -167,7 +167,7 @@ export const App = () => {
           }),
         );
       }
-      if (sorting === "special-attack") {
+      if (sorting === "specialAttack") {
         setFinalResult((prev) =>
           [...prev].sort((a, b) => {
             const aStat = a.stats.find(
@@ -180,7 +180,7 @@ export const App = () => {
           }),
         );
       }
-      if (sorting === "special-defense") {
+      if (sorting === "specialDefense") {
         setFinalResult((prev) =>
           [...prev].sort((a, b) => {
             const aStat = a.stats.find(
