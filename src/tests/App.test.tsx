@@ -1,113 +1,111 @@
 import { render, screen, waitFor } from "@testing-library/react";
-import { describe, expect } from "vitest";
 import userEvent from "@testing-library/user-event";
+import { describe, expect, vi } from "vitest";
 import { App } from "../App";
+
+// 🔧 Utilidad para crear mocks de pokémon
+function createMockPokemon({
+  id,
+  name,
+  spriteUrl = "https://someimage.url/",
+  types = ["grass", "poison"],
+  stats = [
+    { name: "hp", base_stat: 45 },
+    { name: "attack", base_stat: 49 },
+    { name: "defense", base_stat: 49 },
+    { name: "special-attack", base_stat: 65 },
+    { name: "special-defense", base_stat: 65 },
+    { name: "speed", base_stat: 45 },
+  ],
+}) {
+  return {
+    id,
+    name,
+    sprites: {
+      other: {
+        "official-artwork": {
+          front_default: spriteUrl,
+        },
+      },
+    },
+    stats: stats.map((stat) => ({
+      base_stat: stat.base_stat,
+      stat: { name: stat.name },
+    })),
+    types: types.map((type) => ({ type: { name: type } })),
+  };
+}
+
+// 🔁 Utilidad para configurar el mock globalThis.fetch
+function setupMockFetch(pokemonList, mockFetch) {
+  // Mock inicial: lista de resultados
+  mockFetch.mockResolvedValueOnce({
+    ok: true,
+    json: async () => ({
+      results: pokemonList.map((p) => ({
+        name: p.name,
+        url: `https://pokeapi.co/api/v2/pokemon/${p.id}/`,
+      })),
+    }),
+  });
+
+  // Mocks siguientes: detalle por cada pokémon
+  for (const p of pokemonList) {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => createMockPokemon(p),
+    });
+  }
+}
 
 describe("App Component", () => {
   beforeEach(() => {
     const mockFetch = vi.fn();
     globalThis.fetch = mockFetch;
-
-    // Primer fetch: lista de pokémon
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        results: [
-          {
-            name: "bulbasaur",
-            url: "https://pokeapi.co/api/v2/pokemon/1/",
-          },
-          {
-            name: "ivysaur",
-            url: "https://pokeapi.co/api/v2/pokemon/2/",
-          },
-        ],
-      }),
-    });
-
-    // Segundo fetch: detalle del pokémon
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        id: 1,
-        name: "bulbasaur",
-        sprites: {
-          other: {
-            "official-artwork": {
-              front_default: "https://someimage.url/",
-            },
-          },
-        },
-        stats: [
-          { base_stat: 45, stat: { name: "hp" } },
-          { base_stat: 49, stat: { name: "attack" } },
-          { base_stat: 49, stat: { name: "defense" } },
-          { base_stat: 65, stat: { name: "special-attack" } },
-          { base_stat: 65, stat: { name: "special-defense" } },
-          { base_stat: 45, stat: { name: "speed" } },
-        ],
-        types: [{ type: { name: "grass" } }, { type: { name: "poison" } }],
-      }),
-    });
-
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        id: 2,
-        name: "ivysaur",
-        sprites: {
-          other: {
-            "official-artwork": {
-              front_default: "https://someimage.url/",
-            },
-          },
-        },
-        stats: [
-          { base_stat: 45, stat: { name: "hp" } },
-          { base_stat: 49, stat: { name: "attack" } },
-          { base_stat: 49, stat: { name: "defense" } },
-          { base_stat: 65, stat: { name: "special-attack" } },
-          { base_stat: 65, stat: { name: "special-defense" } },
-          { base_stat: 45, stat: { name: "speed" } },
-        ],
-        types: [{ type: { name: "grass" } }, { type: { name: "poison" } }],
-      }),
-    });
+    setupMockFetch(
+      [
+        { id: 1, name: "bulbasaur" },
+        { id: 2, name: "ivysaur" },
+      ],
+      mockFetch,
+    );
   });
 
   it("debería renderizar un nombre desde la API simulada", async () => {
-    //Arrange
     render(<App />);
-
-    //Act
     await waitFor(() => {
-      //Assert
       expect(screen.getByText(/bulbasaur/i)).toBeInTheDocument();
       expect(screen.getByText(/ivysaur/i)).toBeInTheDocument();
     });
   });
 
   it("debería renderizar el filtrado por nombre", async () => {
-    //Arrange
     render(<App />);
+    const input = screen.getByPlaceholderText("Search a Pokémon...");
+    await userEvent.type(input, "ivysaur");
 
-    //Act
-    const placeholder = screen.getByPlaceholderText("Search a Pokémon...");
-    await userEvent.type(placeholder, "ivysaur");
-
-    //Assert
     expect(screen.getByText(/ivysaur/i)).toBeInTheDocument();
     expect(screen.queryByText(/bulbasaur/i)).not.toBeInTheDocument();
   });
 
-  it("debería filtrar según la zona geográfica", async () => {
-    //Arrange
+  it("debería filtrar según la región", async () => {
+    const mockFetch = vi.fn();
+    globalThis.fetch = mockFetch;
+    setupMockFetch([{ id: 1, name: "bulbasaur" }], mockFetch);
+    setupMockFetch([{ id: 3, name: "charizard" }], mockFetch);
+
     render(<App />);
 
-    //Act
-    const boton = screen.getByRole("button");
-    screen.debug(boton);
+    expect(await screen.findByText("bulbasaur")).toBeVisible();
 
-    //Assert
+    const combobox = screen.getByRole("combobox", { name: /select reg/i });
+    await userEvent.click(combobox);
+
+    const opcion = await screen.findByText(/alola/i);
+    await userEvent.click(opcion);
+
+    // Aquí podrías agregar un nuevo setupMockFetch para mockear la nueva región si hace un nuevo fetch
+    // expect(...) lo que esperas ver luego de aplicar el filtro
+    expect(await screen.findByText("charizard")).toBeVisible();
   });
 });
