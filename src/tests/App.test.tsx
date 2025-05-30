@@ -315,7 +315,7 @@ describe('App Component', () => {
     expect(skeleton).toHaveLength(6)
   })
 
-  it('debería ordenar las cartas por distintas características', async () => {
+  it('debería ordenar las cartas por puntos de salud', async () => {
     render(<App />)
 
     const combobox = screen.getByRole('combobox', { name: /sort by/i })
