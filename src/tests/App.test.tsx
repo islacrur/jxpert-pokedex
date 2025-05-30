@@ -108,4 +108,10 @@ describe("App Component", () => {
     // expect(...) lo que esperas ver luego de aplicar el filtro
     expect(await screen.findByText("charizard")).toBeVisible();
   });
+
+  it("debería renderizar el skeleton antes de las cards con la info", async () => {
+    render(<App />);
+    const skeleton = await screen.findAllByTestId("skeleton");
+    expect(skeleton).toHaveLength(6);
+  });
 });
