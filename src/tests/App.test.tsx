@@ -64,7 +64,18 @@ describe("App Component", () => {
     globalThis.fetch = mockFetch;
     setupMockFetch(
       [
-        { id: 1, name: "bulbasaur" },
+        {
+          id: 1,
+          name: "bulbasaur",
+          stats: [
+            { name: "hp", base_stat: 99 },
+            { name: "attack", base_stat: 49 },
+            { name: "defense", base_stat: 49 },
+            { name: "special-attack", base_stat: 65 },
+            { name: "special-defense", base_stat: 65 },
+            { name: "speed", base_stat: 45 },
+          ],
+        },
         { id: 2, name: "ivysaur" },
       ],
       mockFetch,
@@ -113,5 +124,49 @@ describe("App Component", () => {
     render(<App />);
     const skeleton = await screen.findAllByTestId("skeleton");
     expect(skeleton).toHaveLength(6);
+  });
+
+  it("debería ordenar las cartas por distintas características", async () => {
+    const mockFetch = vi.fn();
+    globalThis.fetch = mockFetch;
+    setupMockFetch(
+      [
+        {
+          id: 1,
+          name: "bulbasaur",
+          stats: [
+            { name: "hp", base_stat: 40 },
+            { name: "attack", base_stat: 49 },
+            { name: "defense", base_stat: 49 },
+            { name: "special-attack", base_stat: 65 },
+            { name: "special-defense", base_stat: 65 },
+            { name: "speed", base_stat: 45 },
+          ],
+        },
+        {
+          id: 2,
+          name: "ivysaur",
+          stats: [
+            { name: "hp", base_stat: 99 },
+            { name: "attack", base_stat: 49 },
+            { name: "defense", base_stat: 49 },
+            { name: "special-attack", base_stat: 65 },
+            { name: "special-defense", base_stat: 65 },
+            { name: "speed", base_stat: 45 },
+          ],
+        },
+      ],
+      mockFetch,
+    );
+    render(<App />);
+
+    const combobox = screen.getByRole("combobox", { name: /sort by/i });
+    await userEvent.click(combobox);
+    const option = screen.getAllByLabelText("Health points");
+    await userEvent.click(option[0]);
+    const bulbasaur = screen.getByText("bulbasaur");
+    const ivysaur = screen.getByText("ivysaur");
+
+    expect(ivysaur.compareDocumentPosition(bulbasaur)).toBe(4);
   });
 });
