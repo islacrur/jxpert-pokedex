@@ -110,6 +110,23 @@ describe('App Component', () => {
     expect(screen.queryByText(/bulbasaur/i)).not.toBeInTheDocument()
   })
 
+  it('debería filtrar por la región Kanto', async () => {
+    const mockFetch = vi.fn()
+    globalThis.fetch = mockFetch
+    setupMockFetch([{ id: 1, name: 'bulbasaur' }], mockFetch)
+
+    render(<App />)
+    const combobox = screen.getByRole('combobox', { name: /select reg/i })
+
+    expect(await screen.findByText('bulbasaur')).toBeVisible()
+
+    expect(globalThis.fetch).toHaveBeenNthCalledWith(
+      1,
+      `https://pokeapi.co/api/v2/pokemon?offset=0&limit=151`,
+    )
+    expect(combobox).toHaveTextContent('kanto')
+  })
+
   it('debería filtrar por la región de Alola', async () => {
     const mockFetch = vi.fn()
     globalThis.fetch = mockFetch
