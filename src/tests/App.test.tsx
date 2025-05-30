@@ -68,15 +68,26 @@ describe("App Component", () => {
           id: 1,
           name: "bulbasaur",
           stats: [
-            { name: "hp", base_stat: 99 },
-            { name: "attack", base_stat: 49 },
-            { name: "defense", base_stat: 49 },
-            { name: "special-attack", base_stat: 65 },
-            { name: "special-defense", base_stat: 65 },
-            { name: "speed", base_stat: 45 },
+            { name: "hp", base_stat: 40 },
+            { name: "attack", base_stat: 40 },
+            { name: "defense", base_stat: 40 },
+            { name: "special-attack", base_stat: 40 },
+            { name: "special-defense", base_stat: 40 },
+            { name: "speed", base_stat: 40 },
           ],
         },
-        { id: 2, name: "ivysaur" },
+        {
+          id: 2,
+          name: "ivysaur",
+          stats: [
+            { name: "hp", base_stat: 99 },
+            { name: "attack", base_stat: 99 },
+            { name: "defense", base_stat: 99 },
+            { name: "special-attack", base_stat: 99 },
+            { name: "special-defense", base_stat: 99 },
+            { name: "speed", base_stat: 99 },
+          ],
+        },
       ],
       mockFetch,
     );
@@ -127,37 +138,6 @@ describe("App Component", () => {
   });
 
   it("debería ordenar las cartas por distintas características", async () => {
-    const mockFetch = vi.fn();
-    globalThis.fetch = mockFetch;
-    setupMockFetch(
-      [
-        {
-          id: 1,
-          name: "bulbasaur",
-          stats: [
-            { name: "hp", base_stat: 40 },
-            { name: "attack", base_stat: 49 },
-            { name: "defense", base_stat: 49 },
-            { name: "special-attack", base_stat: 65 },
-            { name: "special-defense", base_stat: 65 },
-            { name: "speed", base_stat: 45 },
-          ],
-        },
-        {
-          id: 2,
-          name: "ivysaur",
-          stats: [
-            { name: "hp", base_stat: 99 },
-            { name: "attack", base_stat: 49 },
-            { name: "defense", base_stat: 49 },
-            { name: "special-attack", base_stat: 65 },
-            { name: "special-defense", base_stat: 65 },
-            { name: "speed", base_stat: 45 },
-          ],
-        },
-      ],
-      mockFetch,
-    );
     render(<App />);
 
     const combobox = screen.getByRole("combobox", { name: /sort by/i });
