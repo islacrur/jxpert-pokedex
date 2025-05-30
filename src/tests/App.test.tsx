@@ -263,6 +263,29 @@ describe('App Component', () => {
     expect(await screen.findByText('charizard')).toBeVisible()
   })
 
+  it('debería filtrar por la región Galar', async () => {
+    const mockFetch = vi.fn()
+    globalThis.fetch = mockFetch
+    setupMockFetch([{ id: 1, name: 'bulbasaur' }], mockFetch)
+    setupMockFetch([{ id: 3, name: 'charizard' }], mockFetch)
+
+    render(<App />)
+
+    expect(await screen.findByText('bulbasaur')).toBeVisible()
+
+    const combobox = screen.getByRole('combobox', { name: /select reg/i })
+    await userEvent.click(combobox)
+
+    const opcion = await screen.findByText(/galar/i)
+    await userEvent.click(opcion)
+
+    expect(await screen.findByText('charizard')).toBeVisible()
+    expect(globalThis.fetch).toHaveBeenNthCalledWith(
+      3,
+      `https://pokeapi.co/api/v2/pokemon?offset=809&limit=905`,
+    )
+  })
+
   it('debería renderizar el skeleton antes de las cards con la info', async () => {
     render(<App />)
     const skeleton = await screen.findAllByTestId('skeleton')
