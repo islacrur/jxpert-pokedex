@@ -327,4 +327,17 @@ describe('App Component', () => {
 
     expect(ivysaur.compareDocumentPosition(bulbasaur)).toBe(4)
   })
+
+  it('debería ordenar las cartas por puntos de ataque', async () => {
+    render(<App />)
+
+    const combobox = screen.getByRole('combobox', { name: /sort by/i })
+    await userEvent.click(combobox)
+    const option = screen.getAllByLabelText('Attack')
+    await userEvent.click(option[0])
+    const bulbasaur = screen.getByText('bulbasaur')
+    const ivysaur = screen.getByText('ivysaur')
+
+    expect(ivysaur.compareDocumentPosition(bulbasaur)).toBe(4)
+  })
 })
