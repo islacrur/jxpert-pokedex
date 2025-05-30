@@ -219,6 +219,29 @@ describe('App Component', () => {
     )
   })
 
+  it('debería filtrar por la región Kalos', async () => {
+    const mockFetch = vi.fn()
+    globalThis.fetch = mockFetch
+    setupMockFetch([{ id: 1, name: 'bulbasaur' }], mockFetch)
+    setupMockFetch([{ id: 3, name: 'charizard' }], mockFetch)
+
+    render(<App />)
+
+    expect(await screen.findByText('bulbasaur')).toBeVisible()
+
+    const combobox = screen.getByRole('combobox', { name: /select reg/i })
+    await userEvent.click(combobox)
+
+    const opcion = await screen.findByText(/kalos/i)
+    await userEvent.click(opcion)
+
+    expect(await screen.findByText('charizard')).toBeVisible()
+    expect(globalThis.fetch).toHaveBeenNthCalledWith(
+      3,
+      `https://pokeapi.co/api/v2/pokemon?offset=649&limit=721`,
+    )
+  })
+
   it('debería filtrar por la región de Alola', async () => {
     const mockFetch = vi.fn()
     globalThis.fetch = mockFetch
