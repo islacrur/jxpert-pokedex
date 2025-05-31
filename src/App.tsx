@@ -56,6 +56,8 @@ const REGIONS = {
   paldea: { regionStart: 905, regionEnd: 1025 },
 } as const
 
+const STATS_MAX_VALUE: string = '255'
+
 type Region = keyof typeof REGIONS
 
 type PokemonsList = {
@@ -563,7 +565,7 @@ export const App = () => {
                             </div>
                             <progress
                               value={res.stats[0].base_stat}
-                              max="255"
+                              max={STATS_MAX_VALUE}
                             ></progress>
                           </li>
                           <li className="card__stat" aria-label="Attack">
@@ -575,7 +577,7 @@ export const App = () => {
                             </div>
                             <progress
                               value={res.stats[1].base_stat}
-                              max="255"
+                              max={STATS_MAX_VALUE}
                             ></progress>
                           </li>
                           <li className="card__stat" aria-label="Defense">
@@ -587,7 +589,7 @@ export const App = () => {
                             </div>
                             <progress
                               value={res.stats[2].base_stat}
-                              max="255"
+                              max={STATS_MAX_VALUE}
                             ></progress>
                           </li>
                           <li
@@ -602,7 +604,7 @@ export const App = () => {
                             </div>
                             <progress
                               value={res.stats[3].base_stat}
-                              max="255"
+                              max={STATS_MAX_VALUE}
                             ></progress>
                           </li>
                           <li
@@ -617,7 +619,7 @@ export const App = () => {
                             </div>
                             <progress
                               value={res.stats[4].base_stat}
-                              max="255"
+                              max={STATS_MAX_VALUE}
                             ></progress>
                           </li>
                           <li className="card__stat" aria-label="Speed">
@@ -629,7 +631,7 @@ export const App = () => {
                             </div>
                             <progress
                               value={res.stats[5].base_stat}
-                              max="255"
+                              max={STATS_MAX_VALUE}
                             ></progress>
                           </li>
                         </ul>
@@ -641,7 +643,7 @@ export const App = () => {
             </ul>
           )}
         </section>
-        {!loader && finalResult.length === 0 && (
+        {!cardsLoader && finalResult.length === 0 && (
           <p className="noresults">No results for "{search}"</p>
         )}
       </main>
