@@ -43,7 +43,7 @@ const icons: any = {
   water,
 }
 
-const regions = [
+const regions: string[] = [
   'kanto',
   'johto',
   'hoenn',
@@ -55,16 +55,28 @@ const regions = [
   'paldea',
 ]
 
+type PokemonsList = {
+  count: number
+  next: string
+  previous: null
+  results: [
+    {
+      name: string
+      url: string
+    },
+  ]
+}
+
 export const App = () => {
-  const [loader, setLoader] = useState<any>(false)
-  const [filter, setFilter] = useState<any>(false)
-  const [result, setResult] = useState<any>([])
+  const [loader, setLoader] = useState<boolean>(false)
+  const [filter, setFilter] = useState<boolean>(false)
+  const [pokemons, setPokemons] = useState<any>([])
   const [finalResult, setFinalResult] = useState<any>([])
-  const [search, setSearch] = useState<any>('')
-  const [region, setRegion] = useState<any>('kanto')
-  const [showRegions, setShowRegions] = useState<any>(false)
-  const [showSort, setShowSort] = useState<any>(false)
-  const [sort, setSort] = useState<any>('default')
+  const [search, setSearch] = useState<string>('')
+  const [region, setRegion] = useState<string>('kanto')
+  const [showRegions, setShowRegions] = useState<boolean>(false)
+  const [showSort, setShowSort] = useState<boolean>(false)
+  const [sort, setSort] = useState<string>('default')
 
   useEffect(() => {
     /**
@@ -106,7 +118,7 @@ export const App = () => {
         regionStart = 0
         regionEnd = 151
       }
-      const { results }: any = await fetch(
+      const { results }: PokemonsList = await fetch(
         `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
       ).then((response) => response.json())
       const result = await Promise.all(
@@ -115,7 +127,7 @@ export const App = () => {
             await fetch(url).then((response) => response.json()),
         ),
       )
-      setResult(result)
+      setPokemons(result)
       setFinalResult(result)
       setLoader(false)
     }
@@ -126,7 +138,7 @@ export const App = () => {
    */
   useEffect(() => {
     setFinalResult(
-      result.filter(
+      pokemons.filter(
         (res) =>
           res.name.includes(search.toLowerCase()) ||
           !!res.types.find((type) =>
@@ -135,7 +147,7 @@ export const App = () => {
       ),
     )
     setFilter(false)
-  }, [result[0]?.id, search])
+  }, [pokemons[0]?.id, search])
   /**
    * Sorts results based on selected sorting criteria.
    */
