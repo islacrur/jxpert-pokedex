@@ -74,44 +74,45 @@ export const App = () => {
       setLoader(true)
       setFilter(true)
 
-      let regStart, regEnd
+      let regionStart, regionEnd
       if (region === 'kanto') {
-        regStart = 0
-        regEnd = 151
+        regionStart = 0
+        regionEnd = 151
       } else if (region === 'johto') {
-        regStart = 151
-        regEnd = 251
+        regionStart = 151
+        regionEnd = 251
       } else if (region === 'hoenn') {
-        regStart = 251
-        regEnd = 386
+        regionStart = 251
+        regionEnd = 386
       } else if (region === 'sinnoh') {
-        regStart = 386
-        regEnd = 494
+        regionStart = 386
+        regionEnd = 494
       } else if (region === 'unova') {
-        regStart = 494
-        regEnd = 649
+        regionStart = 494
+        regionEnd = 649
       } else if (region === 'kalos') {
-        regStart = 649
-        regEnd = 721
+        regionStart = 649
+        regionEnd = 721
       } else if (region === 'alola') {
-        regStart = 721
-        regEnd = 809
+        regionStart = 721
+        regionEnd = 809
       } else if (region === 'galar') {
-        regStart = 809
-        regEnd = 905
+        regionStart = 809
+        regionEnd = 905
       } else if (region === 'paldea') {
-        regStart = 905
-        regEnd = 1025
+        regionStart = 905
+        regionEnd = 1025
       } else {
-        regStart = 0
-        regEnd = 151
+        regionStart = 0
+        regionEnd = 151
       }
       const { results }: any = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?offset=${regStart}&limit=${regEnd}`,
-      ).then((res) => res.json())
+        `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
+      ).then((response) => response.json())
       const result = await Promise.all(
         results.map(
-          async ({ url }) => await fetch(url).then((res) => res.json()),
+          async ({ url }) =>
+            await fetch(url).then((response) => response.json()),
         ),
       )
       setResult(result)
