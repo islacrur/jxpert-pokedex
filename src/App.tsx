@@ -22,7 +22,12 @@ import pokeball from './assets/pokeball.svg'
 /**
  *  Iconos de los tipos de Pokémon
  */
-const icons: any = {
+
+type Icons = {
+  [key: string]: string
+}
+
+const icons: Icons = {
   bug,
   dark,
   dragon,
@@ -43,16 +48,26 @@ const icons: any = {
   water,
 }
 
+const KANTO: string = 'kanto'
+const JOHTO: string = 'johto'
+const HOENN: string = 'hoenn'
+const SINNOH: string = 'sinnoh'
+const UNOVA: string = 'unova'
+const KALOS: string = 'kalos'
+const ALOLA: string = 'alola'
+const GALAR: string = 'galar'
+const PALDEA: string = 'paldea'
+
 const regions: string[] = [
-  'kanto',
-  'johto',
-  'hoenn',
-  'sinnoh',
-  'unova',
-  'kalos',
-  'alola',
-  'galar',
-  'paldea',
+  KANTO,
+  JOHTO,
+  HOENN,
+  SINNOH,
+  UNOVA,
+  KALOS,
+  ALOLA,
+  GALAR,
+  PALDEA,
 ]
 
 type PokemonsList = {
@@ -87,31 +102,31 @@ export const App = () => {
       setFilter(true)
 
       let regionStart, regionEnd
-      if (region === 'kanto') {
+      if (region === KANTO) {
         regionStart = 0
         regionEnd = 151
-      } else if (region === 'johto') {
+      } else if (region === JOHTO) {
         regionStart = 151
         regionEnd = 251
-      } else if (region === 'hoenn') {
+      } else if (region === HOENN) {
         regionStart = 251
         regionEnd = 386
-      } else if (region === 'sinnoh') {
+      } else if (region === SINNOH) {
         regionStart = 386
         regionEnd = 494
-      } else if (region === 'unova') {
+      } else if (region === UNOVA) {
         regionStart = 494
         regionEnd = 649
-      } else if (region === 'kalos') {
+      } else if (region === KALOS) {
         regionStart = 649
         regionEnd = 721
-      } else if (region === 'alola') {
+      } else if (region === ALOLA) {
         regionStart = 721
         regionEnd = 809
-      } else if (region === 'galar') {
+      } else if (region === GALAR) {
         regionStart = 809
         regionEnd = 905
-      } else if (region === 'paldea') {
+      } else if (region === PALDEA) {
         regionStart = 905
         regionEnd = 1025
       } else {
