@@ -71,6 +71,31 @@ type PokemonsList = {
     },
   ]
 }
+type Stat = {
+  name: string
+  url: string
+}
+type Type = {
+  name: string
+  url: string
+}
+
+type Pokemon = {
+  id: number
+  name: string
+  types: [
+    {
+      type: Type
+    },
+  ]
+  stats: [
+    {
+      base_stat: number
+      effort: number
+      stat: Stat
+    },
+  ]
+}
 
 export const App = () => {
   const [cardsLoader, setCardsLoader] = useState<boolean>(false)
@@ -113,9 +138,9 @@ export const App = () => {
   useEffect(() => {
     setFinalResult(
       pokemons.filter(
-        (res) =>
-          res.name.includes(search.toLowerCase()) ||
-          !!res.types.find((type) =>
+        (pokemon: Pokemon) =>
+          pokemon.name.includes(search.toLowerCase()) ||
+          !!pokemon.types.find((type) =>
             type.type.name.startsWith(search.toLowerCase()),
           ),
       ),
