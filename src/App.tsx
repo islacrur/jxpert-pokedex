@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
-import bug from "./assets/bug.svg";
-import dark from "./assets/dark.svg";
-import dragon from "./assets/dragon.svg";
-import electric from "./assets/electric.svg";
-import fairy from "./assets/fairy.svg";
-import fighting from "./assets/fighting.svg";
-import fire from "./assets/fire.svg";
-import flying from "./assets/flying.svg";
-import ghost from "./assets/ghost.svg";
-import grass from "./assets/grass.svg";
-import ground from "./assets/ground.svg";
-import ice from "./assets/ice.svg";
-import normal from "./assets/normal.svg";
-import poison from "./assets/poison.svg";
-import psychic from "./assets/psychic.svg";
-import rock from "./assets/rock.svg";
-import steel from "./assets/steel.svg";
-import water from "./assets/water.svg";
-import pokeball from "./assets/pokeball.svg";
+import { useEffect, useState } from 'react'
+import bug from './assets/bug.svg'
+import dark from './assets/dark.svg'
+import dragon from './assets/dragon.svg'
+import electric from './assets/electric.svg'
+import fairy from './assets/fairy.svg'
+import fighting from './assets/fighting.svg'
+import fire from './assets/fire.svg'
+import flying from './assets/flying.svg'
+import ghost from './assets/ghost.svg'
+import grass from './assets/grass.svg'
+import ground from './assets/ground.svg'
+import ice from './assets/ice.svg'
+import normal from './assets/normal.svg'
+import poison from './assets/poison.svg'
+import psychic from './assets/psychic.svg'
+import rock from './assets/rock.svg'
+import steel from './assets/steel.svg'
+import water from './assets/water.svg'
+import pokeball from './assets/pokeball.svg'
 
 /**
  *  Iconos de los tipos de Pokémon
@@ -41,85 +41,85 @@ const icns: any = {
   rock,
   steel,
   water,
-};
+}
 
 const regs = [
-  "kanto",
-  "johto",
-  "hoenn",
-  "sinnoh",
-  "unova",
-  "kalos",
-  "alola",
-  "galar",
-  "paldea",
-];
+  'kanto',
+  'johto',
+  'hoenn',
+  'sinnoh',
+  'unova',
+  'kalos',
+  'alola',
+  'galar',
+  'paldea',
+]
 
 export const App = () => {
-  const [ldr, setLdr] = useState<any>(false);
-  const [fltr, setFltr] = useState<any>(false);
-  const [result, setResult] = useState<any>([]);
-  const [finalResult, setFinalResult] = useState<any>([]);
-  const [busqueda, setBusqueda] = useState<any>("");
-  const [reg, setreg] = useState<any>("kanto");
-  const [showregs, setShowregs] = useState<any>(false);
-  const [showSort, setShowSort] = useState<any>(false);
-  const [sorting, setSort] = useState<any>("default");
+  const [ldr, setLdr] = useState<any>(false)
+  const [fltr, setFltr] = useState<any>(false)
+  const [result, setResult] = useState<any>([])
+  const [finalResult, setFinalResult] = useState<any>([])
+  const [busqueda, setBusqueda] = useState<any>('')
+  const [reg, setreg] = useState<any>('kanto')
+  const [showregs, setShowregs] = useState<any>(false)
+  const [showSort, setShowSort] = useState<any>(false)
+  const [sorting, setSort] = useState<any>('default')
 
   useEffect(() => {
     /**
      *  Carga de datos de Pokémons y gestión de estado de cargando.
      */
     const getData = async () => {
-      setLdr(true);
-      setFltr(true);
+      setLdr(true)
+      setFltr(true)
 
-      let regStart, regEnd;
-      if (reg === "kanto") {
-        regStart = 0;
-        regEnd = 151;
-      } else if (reg === "johto") {
-        regStart = 151;
-        regEnd = 251;
-      } else if (reg === "hoenn") {
-        regStart = 251;
-        regEnd = 386;
-      } else if (reg === "sinnoh") {
-        regStart = 386;
-        regEnd = 494;
-      } else if (reg === "unova") {
-        regStart = 494;
-        regEnd = 649;
-      } else if (reg === "kalos") {
-        regStart = 649;
-        regEnd = 721;
-      } else if (reg === "alola") {
-        regStart = 721;
-        regEnd = 809;
-      } else if (reg === "galar") {
-        regStart = 809;
-        regEnd = 905;
-      } else if (reg === "paldea") {
-        regStart = 905;
-        regEnd = 1025;
+      let regStart, regEnd
+      if (reg === 'kanto') {
+        regStart = 0
+        regEnd = 151
+      } else if (reg === 'johto') {
+        regStart = 151
+        regEnd = 251
+      } else if (reg === 'hoenn') {
+        regStart = 251
+        regEnd = 386
+      } else if (reg === 'sinnoh') {
+        regStart = 386
+        regEnd = 494
+      } else if (reg === 'unova') {
+        regStart = 494
+        regEnd = 649
+      } else if (reg === 'kalos') {
+        regStart = 649
+        regEnd = 721
+      } else if (reg === 'alola') {
+        regStart = 721
+        regEnd = 809
+      } else if (reg === 'galar') {
+        regStart = 809
+        regEnd = 905
+      } else if (reg === 'paldea') {
+        regStart = 905
+        regEnd = 1025
       } else {
-        regStart = 0;
-        regEnd = 151;
+        regStart = 0
+        regEnd = 151
       }
       const { results }: any = await fetch(
         `https://pokeapi.co/api/v2/pokemon?offset=${regStart}&limit=${regEnd}`,
-      ).then((res) => res.json());
+      ).then((res) => res.json())
       const result = await Promise.all(
         results.map(
           async ({ url }) => await fetch(url).then((res) => res.json()),
         ),
-      );
-      setResult(result);
-      setFinalResult(result);
-      setLdr(false);
-    };
-    getData();
-  }, [reg]);
+      )
+      setResult(result)
+      setFinalResult(result)
+      setLdr(false)
+    }
+    getData()
+  }, [reg])
   /**
    * Filters results based on input query term.
    */
@@ -132,85 +132,85 @@ export const App = () => {
             type.type.name.startsWith(busqueda.toLowerCase()),
           ),
       ),
-    );
-    setFltr(false);
-  }, [result[0]?.id, busqueda]);
+    )
+    setFltr(false)
+  }, [result[0]?.id, busqueda])
   /**
    * Sorts results based on selected sorting criteria.
    */
   useEffect(() => {
-    if (sorting !== "default") {
-      if (sorting === "hp") {
+    if (sorting !== 'default') {
+      if (sorting === 'hp') {
         setFinalResult((prev) =>
           [...prev].sort((a, b) => {
-            const aStat = a.stats.find((stat) => stat.stat.name === "hp");
-            const bStat = b.stats.find((stat) => stat.stat.name === "hp");
-            return bStat.base_stat - aStat.base_stat;
+            const aStat = a.stats.find((stat) => stat.stat.name === 'hp')
+            const bStat = b.stats.find((stat) => stat.stat.name === 'hp')
+            return bStat.base_stat - aStat.base_stat
           }),
-        );
+        )
       }
-      if (sorting === "attack") {
+      if (sorting === 'attack') {
         setFinalResult((prev) =>
           [...prev].sort((a, b) => {
-            const aStat = a.stats.find((stat) => stat.stat.name === "attack");
-            const bStat = b.stats.find((stat) => stat.stat.name === "attack");
-            return bStat.base_stat - aStat.base_stat;
+            const aStat = a.stats.find((stat) => stat.stat.name === 'attack')
+            const bStat = b.stats.find((stat) => stat.stat.name === 'attack')
+            return bStat.base_stat - aStat.base_stat
           }),
-        );
+        )
       }
-      if (sorting === "defense") {
+      if (sorting === 'defense') {
         setFinalResult((prev) =>
           [...prev].sort((a, b) => {
-            const aStat = a.stats.find((stat) => stat.stat.name === "defense");
-            const bStat = b.stats.find((stat) => stat.stat.name === "defense");
-            return bStat.base_stat - aStat.base_stat;
+            const aStat = a.stats.find((stat) => stat.stat.name === 'defense')
+            const bStat = b.stats.find((stat) => stat.stat.name === 'defense')
+            return bStat.base_stat - aStat.base_stat
           }),
-        );
+        )
       }
-      if (sorting === "specialAttack") {
+      if (sorting === 'specialAttack') {
         setFinalResult((prev) =>
           [...prev].sort((a, b) => {
             const aStat = a.stats.find(
-              (stat) => stat.stat.name === "special-attack",
-            );
+              (stat) => stat.stat.name === 'special-attack',
+            )
             const bStat = b.stats.find(
-              (stat) => stat.stat.name === "special-attack",
-            );
-            return bStat.base_stat - aStat.base_stat;
+              (stat) => stat.stat.name === 'special-attack',
+            )
+            return bStat.base_stat - aStat.base_stat
           }),
-        );
+        )
       }
-      if (sorting === "specialDefense") {
+      if (sorting === 'specialDefense') {
         setFinalResult((prev) =>
           [...prev].sort((a, b) => {
             const aStat = a.stats.find(
-              (stat) => stat.stat.name === "special-defense",
-            );
+              (stat) => stat.stat.name === 'special-defense',
+            )
             const bStat = b.stats.find(
-              (stat) => stat.stat.name === "special-defense",
-            );
-            return bStat.base_stat - aStat.base_stat;
+              (stat) => stat.stat.name === 'special-defense',
+            )
+            return bStat.base_stat - aStat.base_stat
           }),
-        );
+        )
       }
-      if (sorting === "speed") {
+      if (sorting === 'speed') {
         setFinalResult((prev) =>
           [...prev].sort((a, b) => {
-            const aStat = a.stats.find((stat) => stat.stat.name === "speed");
-            const bStat = b.stats.find((stat) => stat.stat.name === "speed");
-            return bStat.base_stat - aStat.base_stat;
+            const aStat = a.stats.find((stat) => stat.stat.name === 'speed')
+            const bStat = b.stats.find((stat) => stat.stat.name === 'speed')
+            return bStat.base_stat - aStat.base_stat
           }),
-        );
+        )
       }
     }
-    if (sorting === "default") {
+    if (sorting === 'default') {
       setFinalResult((prev) =>
         [...prev].sort((a, b) => {
-          return a.id - b.id;
+          return a.id - b.id
         }),
-      );
+      )
     }
-  }, [finalResult[0]?.id, sorting]);
+  }, [finalResult[0]?.id, sorting])
 
   return (
     <div className="layout">
@@ -258,13 +258,13 @@ export const App = () => {
               aria-controls="reg-list"
               aria-label="Select reg"
               aria-expanded={showregs}
-              className={`dropdown__button ${showregs ? "active" : ""}`}
+              className={`dropdown__button ${showregs ? 'active' : ''}`}
               onClick={() =>
                 setShowregs((prev) => {
                   if (showSort) {
-                    setShowSort(false);
+                    setShowSort(false)
                   }
-                  return !prev;
+                  return !prev
                 })
               }
             >
@@ -296,7 +296,7 @@ export const App = () => {
               role="listbox"
               id="reg-list"
               hidden={!showregs}
-              className={`dropdown__list ${!showregs ? "hide" : ""}`}
+              className={`dropdown__list ${!showregs ? 'hide' : ''}`}
             >
               {regs.map((key) => (
                 <li
@@ -304,15 +304,15 @@ export const App = () => {
                   role="radio"
                   aria-checked={reg === key}
                   tabIndex={0}
-                  className={reg === key ? "active" : ""}
+                  className={reg === key ? 'active' : ''}
                   onClick={() => {
-                    setreg(key);
-                    setShowregs(false);
+                    setreg(key)
+                    setShowregs(false)
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setreg(key);
-                      setShowregs(false);
+                    if (e.key === 'Enter') {
+                      setreg(key)
+                      setShowregs(false)
                     }
                   }}
                 >
@@ -331,8 +331,8 @@ export const App = () => {
             className="sort__button"
             onClick={() =>
               setShowSort((prev) => {
-                if (showregs) setShowregs(false);
-                return !prev;
+                if (showregs) setShowregs(false)
+                return !prev
               })
             }
           >
@@ -343,7 +343,7 @@ export const App = () => {
               viewBox="0 0 24 24"
               fill="none"
               stroke={
-                showSort ? "var(--color-accent)" : "var(--color-neutral-700)"
+                showSort ? 'var(--color-accent)' : 'var(--color-neutral-700)'
               }
               strokeWidth="2"
               strokeLinecap="round"
@@ -368,41 +368,41 @@ export const App = () => {
                   aria-label="Default"
                   tabIndex={0}
                   className={`sort__pill ${
-                    sorting === "default" ? "active" : ""
+                    sorting === 'default' ? 'active' : ''
                   }`}
-                  aria-checked={sorting === "default"}
+                  aria-checked={sorting === 'default'}
                   onClick={() => {
-                    setSort("default");
-                    setShowSort(false);
+                    setSort('default')
+                    setShowSort(false)
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("default");
-                      setShowSort(false);
+                    if (e.key === 'Enter') {
+                      setSort('default')
+                      setShowSort(false)
                     }
                   }}
                 >
-                  {" "}
+                  {' '}
                   Default
                 </span>
                 <span
                   role="radio"
                   aria-label="Health points"
                   tabIndex={0}
-                  className={`sort__pill ${sorting === "hp" ? "active" : ""}`}
-                  aria-checked={sorting === "hp"}
+                  className={`sort__pill ${sorting === 'hp' ? 'active' : ''}`}
+                  aria-checked={sorting === 'hp'}
                   onClick={() => {
-                    setSort("hp");
-                    setShowSort(false);
+                    setSort('hp')
+                    setShowSort(false)
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("hp");
-                      setShowSort(false);
+                    if (e.key === 'Enter') {
+                      setSort('hp')
+                      setShowSort(false)
                     }
                   }}
                 >
-                  {" "}
+                  {' '}
                   Hp
                 </span>
                 <span
@@ -410,21 +410,21 @@ export const App = () => {
                   aria-label="Attack"
                   tabIndex={0}
                   className={`sort__pill ${
-                    sorting === "attack" ? "active" : ""
+                    sorting === 'attack' ? 'active' : ''
                   }`}
-                  aria-checked={sorting === "attack"}
+                  aria-checked={sorting === 'attack'}
                   onClick={() => {
-                    setSort("attack");
-                    setShowSort(false);
+                    setSort('attack')
+                    setShowSort(false)
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("attack");
-                      setShowSort(false);
+                    if (e.key === 'Enter') {
+                      setSort('attack')
+                      setShowSort(false)
                     }
                   }}
                 >
-                  {" "}
+                  {' '}
                   At
                 </span>
                 <span
@@ -432,17 +432,17 @@ export const App = () => {
                   aria-label="Defense"
                   tabIndex={0}
                   className={`sort__pill ${
-                    sorting === "defense" ? "active" : ""
+                    sorting === 'defense' ? 'active' : ''
                   }`}
-                  aria-checked={sorting === "defense"}
+                  aria-checked={sorting === 'defense'}
                   onClick={() => {
-                    setSort("defense");
-                    setShowSort(false);
+                    setSort('defense')
+                    setShowSort(false)
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("defense");
-                      setShowSort(false);
+                    if (e.key === 'Enter') {
+                      setSort('defense')
+                      setShowSort(false)
                     }
                   }}
                 >
@@ -453,21 +453,21 @@ export const App = () => {
                   aria-label="Special attack"
                   tabIndex={0}
                   className={`sort__pill ${
-                    sorting === "specialAttack" ? "active" : ""
+                    sorting === 'specialAttack' ? 'active' : ''
                   }`}
-                  aria-checked={sorting === "specialAttack"}
+                  aria-checked={sorting === 'specialAttack'}
                   onClick={() => {
-                    setSort("specialAttack");
-                    setShowSort(false);
+                    setSort('specialAttack')
+                    setShowSort(false)
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("specialAttack");
-                      setShowSort(false);
+                    if (e.key === 'Enter') {
+                      setSort('specialAttack')
+                      setShowSort(false)
                     }
                   }}
                 >
-                  {" "}
+                  {' '}
                   SpA
                 </span>
                 <span
@@ -475,17 +475,17 @@ export const App = () => {
                   aria-label="Special defense"
                   tabIndex={0}
                   className={`sort__pill ${
-                    sorting === "specialDefense" ? "active" : ""
+                    sorting === 'specialDefense' ? 'active' : ''
                   }`}
-                  aria-checked={sorting === "specialDefense"}
+                  aria-checked={sorting === 'specialDefense'}
                   onClick={() => {
-                    setSort("specialDefense");
-                    setShowSort(false);
+                    setSort('specialDefense')
+                    setShowSort(false)
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("specialDefense");
-                      setShowSort(false);
+                    if (e.key === 'Enter') {
+                      setSort('specialDefense')
+                      setShowSort(false)
                     }
                   }}
                 >
@@ -496,21 +496,21 @@ export const App = () => {
                   aria-label="Speed"
                   tabIndex={0}
                   className={`sort__pill ${
-                    sorting === "speed" ? "active" : ""
+                    sorting === 'speed' ? 'active' : ''
                   }`}
-                  aria-checked={sorting === "speed"}
+                  aria-checked={sorting === 'speed'}
                   onClick={() => {
-                    setSort("speed");
-                    setShowSort(false);
+                    setSort('speed')
+                    setShowSort(false)
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setSort("speed");
-                      setShowSort(false);
+                    if (e.key === 'Enter') {
+                      setSort('speed')
+                      setShowSort(false)
                     }
                   }}
                 >
-                  {" "}
+                  {' '}
                   Spd
                 </span>
               </div>
@@ -533,7 +533,7 @@ export const App = () => {
                       <path d="M12,2C17.52,2 22,6.48 22,12C22,17.52 17.52,22 12,22C6.48,22 2,17.52 2,12C2,6.48 6.48,2 12,2M12,4C7.92,4 4.55,7.05 4.06,11H8.13C8.57,9.27 10.14,8 12,8C13.86,8 15.43,9.27 15.87,11H19.94C19.45,7.05 16.08,4 12,4M12,20C16.08,20 19.45,16.95 19.94,13H15.87C15.43,14.73 13.86,16 12,16C10.14,16 8.57,14.73 8.13,13H4.06C4.55,16.95 7.92,20 12,20M12,10C10.9,10 10,10.9 10,12C10,13.1 10.9,14 12,14C13.1,14 14,13.1 14,12C14,10.9 13.1,10 12,10Z" />
                     </svg>
                   </article>
-                );
+                )
               })}
             </div>
           )}
@@ -542,15 +542,15 @@ export const App = () => {
             <ul className="grid">
               {finalResult.map((res) => {
                 const customStyles: any = {
-                  "--color-type": `var(--color-${res.types[0].type.name}`,
-                };
+                  '--color-type': `var(--color-${res.types[0].type.name}`,
+                }
 
                 return (
                   <li key={`pokemon-card-${res.id}`}>
                     <article className="card" style={customStyles}>
                       <header className="card__head">
                         <div className="card__tag">
-                          <p>#{res.id.toString().padStart(3, "0")}</p>
+                          <p>#{res.id.toString().padStart(3, '0')}</p>
                         </div>
                         <div className="card__tag">
                           <img
@@ -570,7 +570,7 @@ export const App = () => {
                       <img
                         className="card__avatar"
                         src={
-                          res.sprites.other["official-artwork"].front_default
+                          res.sprites.other['official-artwork'].front_default
                         }
                         loading="lazy"
                         alt={`${res.name} artwork`}
@@ -660,7 +660,7 @@ export const App = () => {
                       </section>
                     </article>
                   </li>
-                );
+                )
               })}
             </ul>
           )}
@@ -672,11 +672,11 @@ export const App = () => {
 
       <footer className="footer">
         <p>
-          ©{new Date().getFullYear()} Pokémon. ©1995 -{" "}
+          ©{new Date().getFullYear()} Pokémon. ©1995 -{' '}
           {new Date().getFullYear()} Nintendo/Creatures Inc./GAME FREAK inc. TM,
           ®Nintendo.
         </p>
       </footer>
     </div>
-  );
-};
+  )
+}
