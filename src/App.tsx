@@ -48,27 +48,19 @@ const icons: Icons = {
   water,
 }
 
-const KANTO: string = 'kanto'
-const JOHTO: string = 'johto'
-const HOENN: string = 'hoenn'
-const SINNOH: string = 'sinnoh'
-const UNOVA: string = 'unova'
-const KALOS: string = 'kalos'
-const ALOLA: string = 'alola'
-const GALAR: string = 'galar'
-const PALDEA: string = 'paldea'
+const REGIONS = {
+  kanto: { regionStart: 0, regionEnd: 151 },
+  johto: { regionStart: 151, regionEnd: 251 },
+  hoenn: { regionStart: 251, regionEnd: 386 },
+  sinnoh: { regionStart: 386, regionEnd: 494 },
+  unova: { regionStart: 494, regionEnd: 649 },
+  kalos: { regionStart: 649, regionEnd: 721 },
+  alola: { regionStart: 721, regionEnd: 809 },
+  galar: { regionStart: 809, regionEnd: 905 },
+  paldea: { regionStart: 905, regionEnd: 1025 },
+} as const
 
-const regions: string[] = [
-  KANTO,
-  JOHTO,
-  HOENN,
-  SINNOH,
-  UNOVA,
-  KALOS,
-  ALOLA,
-  GALAR,
-  PALDEA,
-]
+type Region = keyof typeof REGIONS
 
 type PokemonsList = {
   count: number
@@ -88,7 +80,7 @@ export const App = () => {
   const [pokemons, setPokemons] = useState<any>([])
   const [finalResult, setFinalResult] = useState<any>([])
   const [search, setSearch] = useState<string>('')
-  const [region, setRegion] = useState<string>('kanto')
+  const [region, setRegion] = useState<Region>('kanto')
   const [showRegions, setShowRegions] = useState<boolean>(false)
   const [showSort, setShowSort] = useState<boolean>(false)
   const [sort, setSort] = useState<string>('default')
@@ -101,38 +93,10 @@ export const App = () => {
       setLoader(true)
       setFilter(true)
 
-      let regionStart, regionEnd
-      if (region === KANTO) {
-        regionStart = 0
-        regionEnd = 151
-      } else if (region === JOHTO) {
-        regionStart = 151
-        regionEnd = 251
-      } else if (region === HOENN) {
-        regionStart = 251
-        regionEnd = 386
-      } else if (region === SINNOH) {
-        regionStart = 386
-        regionEnd = 494
-      } else if (region === UNOVA) {
-        regionStart = 494
-        regionEnd = 649
-      } else if (region === KALOS) {
-        regionStart = 649
-        regionEnd = 721
-      } else if (region === ALOLA) {
-        regionStart = 721
-        regionEnd = 809
-      } else if (region === GALAR) {
-        regionStart = 809
-        regionEnd = 905
-      } else if (region === PALDEA) {
-        regionStart = 905
-        regionEnd = 1025
-      } else {
-        regionStart = 0
-        regionEnd = 151
-      }
+      const activeRegion = REGIONS[region]
+      const regionStart = activeRegion.regionStart
+      const regionEnd = activeRegion.regionEnd
+
       const { results }: PokemonsList = await fetch(
         `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
       ).then((response) => response.json())
@@ -326,7 +290,7 @@ export const App = () => {
               hidden={!showRegions}
               className={`dropdown__list ${!showRegions ? 'hide' : ''}`}
             >
-              {regions.map((key) => (
+              {(Object.keys(REGIONS) as Region[]).map((key) => (
                 <li
                   key={key}
                   role="radio"
