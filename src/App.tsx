@@ -19,10 +19,6 @@ import steel from './assets/steel.svg'
 import water from './assets/water.svg'
 import pokeball from './assets/pokeball.svg'
 
-/**
- *  Iconos de los tipos de Pokémon
- */
-
 type Icons = {
   [key: string]: string
 }
@@ -75,7 +71,7 @@ type PokemonsList = {
 }
 
 export const App = () => {
-  const [loader, setLoader] = useState<boolean>(false)
+  const [cardsLoader, setCardsLoader] = useState<boolean>(false)
   const [filter, setFilter] = useState<boolean>(false)
   const [pokemons, setPokemons] = useState<any>([])
   const [finalResult, setFinalResult] = useState<any>([])
@@ -86,11 +82,8 @@ export const App = () => {
   const [sort, setSort] = useState<string>('default')
 
   useEffect(() => {
-    /**
-     *  Carga de datos de Pokémons y gestión de estado de cargando.
-     */
-    const getData = async () => {
-      setLoader(true)
+    const uploadPokemonData = async () => {
+      setCardsLoader(true)
       setFilter(true)
 
       const activeRegion = REGIONS[region]
@@ -108,9 +101,9 @@ export const App = () => {
       )
       setPokemons(result)
       setFinalResult(result)
-      setLoader(false)
+      setCardsLoader(false)
     }
-    getData()
+    uploadPokemonData()
   }, [region])
   /**
    * Filters results based on input query term.
@@ -502,9 +495,8 @@ export const App = () => {
           )}
         </section>
 
-        {/* Muestra cartas cargando */}
         <section>
-          {(loader || filter) && (
+          {(cardsLoader || filter) && (
             <div className="grid" aria-hidden="true">
               {Array.from({ length: 6 }, (_, index) => {
                 return (
@@ -522,7 +514,7 @@ export const App = () => {
             </div>
           )}
           {/* Prints cards */}
-          {!filter && !loader && finalResult.length > 0 && (
+          {!filter && !cardsLoader && finalResult.length > 0 && (
             <ul className="grid">
               {finalResult.map((res) => {
                 const customStyles: any = {
