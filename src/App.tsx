@@ -56,6 +56,15 @@ const REGIONS = {
   paldea: { regionStart: 905, regionEnd: 1025 },
 } as const
 
+const CRITERIA = {
+  hp: 'hp',
+  attack: 'attack',
+  defense: 'defense',
+  specialAttack: 'special-attack',
+  specialDefense: 'special-defense',
+  speed: 'speed',
+} as const
+
 const STATS_MAX_VALUE: string = '255'
 
 type Region = keyof typeof REGIONS
@@ -109,6 +118,21 @@ const pokemonData = async (region: Region) => {
   return result
 }
 
+function sortPokemon(pokemonData: Pokemon[], criteria: string): Pokemon[] {
+  if (criteria === 'default') {
+    return [...pokemonData].sort((a, b) => a.id - b.id)
+  }
+
+  const statKey = CRITERIA[criteria]
+  if (!statKey) return pokemonData
+
+  return [...pokemonData].sort((a, b) => {
+    const aStat = a.stats.find((s) => s.stat.name === statKey)
+    const bStat = b.stats.find((s) => s.stat.name === statKey)
+    return (bStat?.base_stat ?? 0) - (aStat?.base_stat ?? 0)
+  })
+}
+
 export const App = () => {
   const [cardsLoader, setCardsLoader] = useState<boolean>(false)
   const [filter, setFilter] = useState<boolean>(false)
@@ -118,7 +142,7 @@ export const App = () => {
   const [region, setRegion] = useState<Region>('kanto')
   const [showRegions, setShowRegions] = useState<boolean>(false)
   const [showSort, setShowSort] = useState<boolean>(false)
-  const [sort, setSort] = useState<string>('default')
+  const [criteria, setCriteria] = useState<string>('default')
 
   useEffect(() => {
     const uploadPokemonData = async () => {
@@ -148,87 +172,10 @@ export const App = () => {
     )
     setFilter(false)
   }, [pokemons[0]?.id, search])
-  /**
-   * Sorts results based on selected sorting criteria.
-   */
-  useEffect(() => {
-    if (sort !== 'default') {
-      if (sort === 'hp') {
-        setFinalResult((prev) =>
-          [...prev].sort((pokemon1: Pokemon, pokemon2: Pokemon) => {
-            const pokemon1Stat =
-              pokemon1.stats.find((stat) => stat.stat.name === 'hp')
-                ?.base_stat ?? 0
-            const pokemon2Stat =
-              pokemon2.stats.find((stat) => stat.stat.name === 'hp')
-                ?.base_stat ?? 0
 
-            return pokemon2Stat - pokemon1Stat
-          }),
-        )
-      }
-      if (sort === 'attack') {
-        setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find((stat) => stat.stat.name === 'attack')
-            const bStat = b.stats.find((stat) => stat.stat.name === 'attack')
-            return bStat.base_stat - aStat.base_stat
-          }),
-        )
-      }
-      if (sort === 'defense') {
-        setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find((stat) => stat.stat.name === 'defense')
-            const bStat = b.stats.find((stat) => stat.stat.name === 'defense')
-            return bStat.base_stat - aStat.base_stat
-          }),
-        )
-      }
-      if (sort === 'specialAttack') {
-        setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find(
-              (stat) => stat.stat.name === 'special-attack',
-            )
-            const bStat = b.stats.find(
-              (stat) => stat.stat.name === 'special-attack',
-            )
-            return bStat.base_stat - aStat.base_stat
-          }),
-        )
-      }
-      if (sort === 'specialDefense') {
-        setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find(
-              (stat) => stat.stat.name === 'special-defense',
-            )
-            const bStat = b.stats.find(
-              (stat) => stat.stat.name === 'special-defense',
-            )
-            return bStat.base_stat - aStat.base_stat
-          }),
-        )
-      }
-      if (sort === 'speed') {
-        setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find((stat) => stat.stat.name === 'speed')
-            const bStat = b.stats.find((stat) => stat.stat.name === 'speed')
-            return bStat.base_stat - aStat.base_stat
-          }),
-        )
-      }
-    }
-    if (sort === 'default') {
-      setFinalResult((prev) =>
-        [...prev].sort((a, b) => {
-          return a.id - b.id
-        }),
-      )
-    }
-  }, [finalResult[0]?.id, sort])
+  useEffect(() => {
+    setFinalResult((prev) => sortPokemon(prev, criteria))
+  }, [criteria])
 
   return (
     <div className="layout">
@@ -385,15 +332,15 @@ export const App = () => {
                   role="radio"
                   aria-label="Default"
                   tabIndex={0}
-                  className={`sort__pill ${sort === 'default' ? 'active' : ''}`}
-                  aria-checked={sort === 'default'}
+                  className={`sort__pill ${criteria === 'default' ? 'active' : ''}`}
+                  aria-checked={criteria === 'default'}
                   onClick={() => {
-                    setSort('default')
+                    setCriteria('default')
                     setShowSort(false)
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      setSort('default')
+                      setCriteria('default')
                       setShowSort(false)
                     }
                   }}
@@ -405,15 +352,15 @@ export const App = () => {
                   role="radio"
                   aria-label="Health points"
                   tabIndex={0}
-                  className={`sort__pill ${sort === 'hp' ? 'active' : ''}`}
-                  aria-checked={sort === 'hp'}
+                  className={`sort__pill ${criteria === 'hp' ? 'active' : ''}`}
+                  aria-checked={criteria === 'hp'}
                   onClick={() => {
-                    setSort('hp')
+                    setCriteria('hp')
                     setShowSort(false)
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      setSort('hp')
+                      setCriteria('hp')
                       setShowSort(false)
                     }
                   }}
@@ -425,15 +372,15 @@ export const App = () => {
                   role="radio"
                   aria-label="Attack"
                   tabIndex={0}
-                  className={`sort__pill ${sort === 'attack' ? 'active' : ''}`}
-                  aria-checked={sort === 'attack'}
+                  className={`sort__pill ${criteria === 'attack' ? 'active' : ''}`}
+                  aria-checked={criteria === 'attack'}
                   onClick={() => {
-                    setSort('attack')
+                    setCriteria('attack')
                     setShowSort(false)
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      setSort('attack')
+                      setCriteria('attack')
                       setShowSort(false)
                     }
                   }}
@@ -445,15 +392,15 @@ export const App = () => {
                   role="radio"
                   aria-label="Defense"
                   tabIndex={0}
-                  className={`sort__pill ${sort === 'defense' ? 'active' : ''}`}
-                  aria-checked={sort === 'defense'}
+                  className={`sort__pill ${criteria === 'defense' ? 'active' : ''}`}
+                  aria-checked={criteria === 'defense'}
                   onClick={() => {
-                    setSort('defense')
+                    setCriteria('defense')
                     setShowSort(false)
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      setSort('defense')
+                      setCriteria('defense')
                       setShowSort(false)
                     }
                   }}
@@ -465,16 +412,16 @@ export const App = () => {
                   aria-label="Special attack"
                   tabIndex={0}
                   className={`sort__pill ${
-                    sort === 'specialAttack' ? 'active' : ''
+                    criteria === 'specialAttack' ? 'active' : ''
                   }`}
-                  aria-checked={sort === 'specialAttack'}
+                  aria-checked={criteria === 'specialAttack'}
                   onClick={() => {
-                    setSort('specialAttack')
+                    setCriteria('specialAttack')
                     setShowSort(false)
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      setSort('specialAttack')
+                      setCriteria('specialAttack')
                       setShowSort(false)
                     }
                   }}
@@ -487,16 +434,16 @@ export const App = () => {
                   aria-label="Special defense"
                   tabIndex={0}
                   className={`sort__pill ${
-                    sort === 'specialDefense' ? 'active' : ''
+                    criteria === 'specialDefense' ? 'active' : ''
                   }`}
-                  aria-checked={sort === 'specialDefense'}
+                  aria-checked={criteria === 'specialDefense'}
                   onClick={() => {
-                    setSort('specialDefense')
+                    setCriteria('specialDefense')
                     setShowSort(false)
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      setSort('specialDefense')
+                      setCriteria('specialDefense')
                       setShowSort(false)
                     }
                   }}
@@ -507,15 +454,15 @@ export const App = () => {
                   role="radio"
                   aria-label="Speed"
                   tabIndex={0}
-                  className={`sort__pill ${sort === 'speed' ? 'active' : ''}`}
-                  aria-checked={sort === 'speed'}
+                  className={`sort__pill ${criteria === 'speed' ? 'active' : ''}`}
+                  aria-checked={criteria === 'speed'}
                   onClick={() => {
-                    setSort('speed')
+                    setCriteria('speed')
                     setShowSort(false)
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      setSort('speed')
+                      setCriteria('speed')
                       setShowSort(false)
                     }
                   }}
