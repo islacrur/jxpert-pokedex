@@ -92,6 +92,23 @@ type Pokemon = {
   }[]
 }
 
+const pokemonData = async (region: Region) => {
+  const activeRegion = REGIONS[region]
+  const regionStart = activeRegion.regionStart
+  const regionEnd = activeRegion.regionEnd
+
+  const { results }: PokemonsList = await fetch(
+    `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
+  ).then((response) => response.json())
+
+  const result: Pokemon[] = await Promise.all(
+    results.map(
+      async ({ url }) => await fetch(url).then((response) => response.json()),
+    ),
+  )
+  return result
+}
+
 export const App = () => {
   const [cardsLoader, setCardsLoader] = useState<boolean>(false)
   const [filter, setFilter] = useState<boolean>(false)
@@ -108,19 +125,8 @@ export const App = () => {
       setCardsLoader(true)
       setFilter(true)
 
-      const activeRegion = REGIONS[region]
-      const regionStart = activeRegion.regionStart
-      const regionEnd = activeRegion.regionEnd
+      const result = await pokemonData(region)
 
-      const { results }: PokemonsList = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
-      ).then((response) => response.json())
-      const result: Pokemon[] = await Promise.all(
-        results.map(
-          async ({ url }) =>
-            await fetch(url).then((response) => response.json()),
-        ),
-      )
       setPokemons(result)
       setFinalResult(result)
       setCardsLoader(false)
