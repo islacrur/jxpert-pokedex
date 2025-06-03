@@ -64,13 +64,12 @@ type PokemonsList = {
   count: number
   next: string
   previous: null
-  results: [
-    {
-      name: string
-      url: string
-    },
-  ]
+  results: {
+    name: string
+    url: string
+  }[]
 }
+
 type Stat = {
   name: string
   url: string
@@ -83,18 +82,14 @@ type Type = {
 type Pokemon = {
   id: number
   name: string
-  types: [
-    {
-      type: Type
-    },
-  ]
-  stats: [
-    {
-      base_stat: number
-      effort: number
-      stat: Stat
-    },
-  ]
+  types: {
+    type: Type
+  }[]
+  stats: {
+    base_stat: number
+    effort: number
+    stat: Stat
+  }[]
 }
 
 export const App = () => {
@@ -120,7 +115,7 @@ export const App = () => {
       const { results }: PokemonsList = await fetch(
         `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
       ).then((response) => response.json())
-      const result = await Promise.all(
+      const result: Pokemon[] = await Promise.all(
         results.map(
           async ({ url }) =>
             await fetch(url).then((response) => response.json()),
@@ -154,10 +149,15 @@ export const App = () => {
     if (sort !== 'default') {
       if (sort === 'hp') {
         setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find((stat) => stat.stat.name === 'hp')
-            const bStat = b.stats.find((stat) => stat.stat.name === 'hp')
-            return bStat.base_stat - aStat.base_stat
+          [...prev].sort((pokemon1: Pokemon, pokemon2: Pokemon) => {
+            const pokemon1Stat =
+              pokemon1.stats.find((stat) => stat.stat.name === 'hp')
+                ?.base_stat ?? 0
+            const pokemon2Stat =
+              pokemon2.stats.find((stat) => stat.stat.name === 'hp')
+                ?.base_stat ?? 0
+
+            return pokemon2Stat - pokemon1Stat
           }),
         )
       }
