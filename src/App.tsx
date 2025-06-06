@@ -18,6 +18,7 @@ import rock from './assets/rock.svg'
 import steel from './assets/steel.svg'
 import water from './assets/water.svg'
 import pokeball from './assets/pokeball.svg'
+import { CriteriaProgressBar } from './components/CriteriaProgressBar'
 
 type Icons = {
   [key: string]: string
@@ -70,7 +71,7 @@ const CRITERIA: Criteria = {
   default: 'default',
 } as const
 
-const STATS_MAX_VALUE: string = '255'
+// const STATS_MAX_VALUE: string = '255'
 
 type Region = keyof typeof REGIONS
 
@@ -504,29 +505,28 @@ export const App = () => {
           {/* Prints cards */}
           {!filter && !cardsLoader && finalResult.length > 0 && (
             <ul className="grid">
-              {finalResult.map((res) => {
+              {finalResult.map((pokemon) => {
                 const customStyles: any = {
-                  '--color-type': `var(--color-${res.types[0].type.name}`,
+                  '--color-type': `var(--color-${pokemon.types[0].type.name}`,
                 }
-
                 return (
-                  <li key={`pokemon-card-${res.id}`}>
+                  <li key={`pokemon-card-${pokemon.id}`}>
                     <article className="card" style={customStyles}>
                       <header className="card__head">
                         <div className="card__tag">
-                          <p>#{res.id.toString().padStart(3, '0')}</p>
+                          <p>#{pokemon.id.toString().padStart(3, '0')}</p>
                         </div>
                         <div className="card__tag">
                           <img
-                            src={icons[res.types[0].type.name]}
+                            src={icons[pokemon.types[0].type.name]}
                             className="card__type"
-                            alt={`${res.types[0].type.name} primary type`}
+                            alt={`${pokemon.types[0].type.name} primary type`}
                           />
-                          {res.types[1] && (
+                          {pokemon.types[1] && (
                             <img
-                              src={icons[res.types[1].type.name]}
+                              src={icons[pokemon.types[1].type.name]}
                               className="card__type"
-                              alt={`${res.types[1].type.name} secondary type`}
+                              alt={`${pokemon.types[1].type.name} secondary type`}
                             />
                           )}
                         </div>
@@ -534,92 +534,39 @@ export const App = () => {
                       <img
                         className="card__avatar"
                         src={
-                          res.sprites.other['official-artwork'].front_default
+                          pokemon.sprites.other['official-artwork']
+                            .front_default
                         }
                         loading="lazy"
-                        alt={`${res.name} artwork`}
+                        alt={`${pokemon.name} artwork`}
                       />
                       <section className="card__content">
-                        <h3 className="card__title">{res.name}</h3>
+                        <h3 className="card__title">{pokemon.name}</h3>
                         <ul aria-description="Stats resume">
-                          <li className="card__stat" aria-label="Health points">
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                Hp
-                              </p>
-                              <p>{res.stats[0].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[0].base_stat}
-                              max={STATS_MAX_VALUE}
-                            ></progress>
-                          </li>
-                          <li className="card__stat" aria-label="Attack">
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                At
-                              </p>
-                              <p>{res.stats[1].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[1].base_stat}
-                              max={STATS_MAX_VALUE}
-                            ></progress>
-                          </li>
-                          <li className="card__stat" aria-label="Defense">
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                Df
-                              </p>
-                              <p>{res.stats[2].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[2].base_stat}
-                              max={STATS_MAX_VALUE}
-                            ></progress>
-                          </li>
-                          <li
-                            className="card__stat"
-                            aria-label="Special attack"
-                          >
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                SpA
-                              </p>
-                              <p>{res.stats[3].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[3].base_stat}
-                              max={STATS_MAX_VALUE}
-                            ></progress>
-                          </li>
-                          <li
-                            className="card__stat"
-                            aria-label="Special defense"
-                          >
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                SpD
-                              </p>
-                              <p>{res.stats[4].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[4].base_stat}
-                              max={STATS_MAX_VALUE}
-                            ></progress>
-                          </li>
-                          <li className="card__stat" aria-label="Speed">
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                Spd
-                              </p>
-                              <p>{res.stats[5].base_stat}</p>
-                            </div>
-                            <progress
-                              value={res.stats[5].base_stat}
-                              max={STATS_MAX_VALUE}
-                            ></progress>
-                          </li>
+                          <CriteriaProgressBar
+                            statName="Hp"
+                            statValue={pokemon.stats[0].base_stat}
+                          />
+                          <CriteriaProgressBar
+                            statName="At"
+                            statValue={pokemon.stats[1].base_stat}
+                          />
+                          <CriteriaProgressBar
+                            statName="Df"
+                            statValue={pokemon.stats[2].base_stat}
+                          />
+                          <CriteriaProgressBar
+                            statName="SpA"
+                            statValue={pokemon.stats[3].base_stat}
+                          />
+                          <CriteriaProgressBar
+                            statName="SpD"
+                            statValue={pokemon.stats[4].base_stat}
+                          />
+                          <CriteriaProgressBar
+                            statName="Spd"
+                            statValue={pokemon.stats[5].base_stat}
+                          />
                         </ul>
                       </section>
                     </article>
