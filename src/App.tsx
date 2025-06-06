@@ -19,6 +19,7 @@ import steel from './assets/steel.svg'
 import water from './assets/water.svg'
 import { CriteriaProgressBar } from './components/CriteriaProgressBar'
 import { Header } from './components/Header'
+import { Footer } from './components/Footer'
 
 type Icons = {
   [key: string]: string
@@ -578,13 +579,7 @@ export const App = () => {
         )}
       </main>
 
-      <footer className="footer">
-        <p>
-          ©{new Date().getFullYear()} Pokémon. ©1995 -{' '}
-          {new Date().getFullYear()} Nintendo/Creatures Inc./GAME FREAK inc. TM,
-          ®Nintendo.
-        </p>
-      </footer>
+      <Footer />
     </div>
   )
 }
