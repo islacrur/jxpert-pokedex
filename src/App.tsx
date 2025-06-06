@@ -56,13 +56,18 @@ const REGIONS = {
   paldea: { regionStart: 905, regionEnd: 1025 },
 } as const
 
-const CRITERIA = {
+type Criteria = {
+  [key: string]: string
+}
+
+const CRITERIA: Criteria = {
   hp: 'hp',
   attack: 'attack',
   defense: 'defense',
   specialAttack: 'special-attack',
   specialDefense: 'special-defense',
   speed: 'speed',
+  default: 'default',
 } as const
 
 const STATS_MAX_VALUE: string = '255'
@@ -118,7 +123,10 @@ const pokemonData = async (region: Region) => {
   return result
 }
 
-function sortPokemon(pokemonData: Pokemon[], criteria: string): Pokemon[] {
+function sortPokemon(
+  pokemonData: Pokemon[],
+  criteria: keyof typeof CRITERIA | 'default',
+): Pokemon[] {
   if (criteria === 'default') {
     return [...pokemonData].sort((a, b) => a.id - b.id)
   }
