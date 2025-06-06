@@ -1,5 +1,5 @@
 import React from 'react'
-import pokeball from './assets/pokeball.svg'
+import pokeball from '../assets/pokeball.svg'
 
 type HeaderProps = {
   title?: string
