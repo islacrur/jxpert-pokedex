@@ -17,8 +17,8 @@ import psychic from './assets/psychic.svg'
 import rock from './assets/rock.svg'
 import steel from './assets/steel.svg'
 import water from './assets/water.svg'
-import pokeball from './assets/pokeball.svg'
 import { CriteriaProgressBar } from './components/CriteriaProgressBar'
+import { Header } from './components/Header'
 
 type Icons = {
   [key: string]: string
@@ -188,10 +188,7 @@ export const App = () => {
 
   return (
     <div className="layout">
-      <header className="header">
-        <img src={pokeball} alt="" className="header__logo" />
-        <p className="header__title">Pokédex</p>
-      </header>
+      <Header />
 
       {/* Searcher */}
       <main className="container">
