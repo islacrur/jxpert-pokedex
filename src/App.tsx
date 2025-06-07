@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Header, Footer, Card } from './components'
 import { REGIONS, Region } from './appTypes'
 import { usePokemonData } from './hooks/usePokemonData'
+import { CriteriaButton } from './components/CriteriaButton'
+import { CriteriaButtonGroup } from './components/CriteriaButtonGroup'
 
 export const App = () => {
   const [showSort, setShowSort] = useState<boolean>(false)
@@ -168,148 +170,15 @@ export const App = () => {
             <article className="sort__wrapper">
               <h3 className="sort__title">Sort by</h3>
               <div className="sort__items" role="listbox" id="sort-list">
-                <span
-                  role="radio"
-                  aria-label="Default"
-                  tabIndex={0}
-                  className={`sort__pill ${criteria === 'default' ? 'active' : ''}`}
-                  aria-checked={criteria === 'default'}
-                  onClick={() => {
-                    setCriteria('default')
-                    setShowSort(false)
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      setCriteria('default')
-                      setShowSort(false)
-                    }
-                  }}
-                >
-                  {' '}
-                  Default
-                </span>
-                <span
-                  role="radio"
-                  aria-label="Health points"
-                  tabIndex={0}
-                  className={`sort__pill ${criteria === 'hp' ? 'active' : ''}`}
-                  aria-checked={criteria === 'hp'}
-                  onClick={() => {
-                    setCriteria('hp')
-                    setShowSort(false)
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      setCriteria('hp')
-                      setShowSort(false)
-                    }
-                  }}
-                >
-                  {' '}
-                  Hp
-                </span>
-                <span
-                  role="radio"
-                  aria-label="Attack"
-                  tabIndex={0}
-                  className={`sort__pill ${criteria === 'attack' ? 'active' : ''}`}
-                  aria-checked={criteria === 'attack'}
-                  onClick={() => {
-                    setCriteria('attack')
-                    setShowSort(false)
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      setCriteria('attack')
-                      setShowSort(false)
-                    }
-                  }}
-                >
-                  {' '}
-                  At
-                </span>
-                <span
-                  role="radio"
-                  aria-label="Defense"
-                  tabIndex={0}
-                  className={`sort__pill ${criteria === 'defense' ? 'active' : ''}`}
-                  aria-checked={criteria === 'defense'}
-                  onClick={() => {
-                    setCriteria('defense')
-                    setShowSort(false)
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      setCriteria('defense')
-                      setShowSort(false)
-                    }
-                  }}
-                >
-                  Df
-                </span>
-                <span
-                  role="radio"
-                  aria-label="Special attack"
-                  tabIndex={0}
-                  className={`sort__pill ${
-                    criteria === 'specialAttack' ? 'active' : ''
-                  }`}
-                  aria-checked={criteria === 'specialAttack'}
-                  onClick={() => {
-                    setCriteria('specialAttack')
-                    setShowSort(false)
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      setCriteria('specialAttack')
-                      setShowSort(false)
-                    }
-                  }}
-                >
-                  {' '}
-                  SpA
-                </span>
-                <span
-                  role="radio"
-                  aria-label="Special defense"
-                  tabIndex={0}
-                  className={`sort__pill ${
-                    criteria === 'specialDefense' ? 'active' : ''
-                  }`}
-                  aria-checked={criteria === 'specialDefense'}
-                  onClick={() => {
-                    setCriteria('specialDefense')
-                    setShowSort(false)
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      setCriteria('specialDefense')
-                      setShowSort(false)
-                    }
-                  }}
-                >
-                  SpD
-                </span>
-                <span
-                  role="radio"
-                  aria-label="Speed"
-                  tabIndex={0}
-                  className={`sort__pill ${criteria === 'speed' ? 'active' : ''}`}
-                  aria-checked={criteria === 'speed'}
-                  onClick={() => {
-                    setCriteria('speed')
-                    setShowSort(false)
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      setCriteria('speed')
-                      setShowSort(false)
-                    }
-                  }}
-                >
-                  {' '}
-                  Spd
-                </span>
+                <CriteriaButtonGroup criteria={criteria} setCriteria={setCriteria} setShowSort={setShowSort}>
+                  <CriteriaButton label='Default' value='default'  />
+                  <CriteriaButton label='Hp' value='hp' ariaLabel='Health points' />
+                  <CriteriaButton label='At' value='attack' ariaLabel='Attack' />
+                  <CriteriaButton label='Df' value='defense' ariaLabel='Defense' />
+                  <CriteriaButton label='SpA' value='specialAttack' ariaLabel='Special attack' />
+                  <CriteriaButton label='SpD' value='specialDefense' ariaLabel='Special defense' />
+                  <CriteriaButton label='Spd' value='speed' ariaLabel='Speed' />
+                </CriteriaButtonGroup>
               </div>
             </article>
           )}
