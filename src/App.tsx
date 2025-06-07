@@ -1,27 +1,24 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Header, Footer, Card } from './components'
-import{REGIONS, Region, Pokemon, PokemonsList} from './appTypes'
-import{usePokemonData} from './hooks/usePokemonData'
-
-
-
-
-
+import { REGIONS, Region } from './appTypes'
+import { usePokemonData } from './hooks/usePokemonData'
 
 export const App = () => {
- 
-    const [showSort, setShowSort] = useState<boolean>(false) 
+  const [showSort, setShowSort] = useState<boolean>(false)
 
   const [showRegions, setShowRegions] = useState<boolean>(false)
 
-
-  const { pokemons, finalResult, loading, filter, search, setSearch, region, setRegion, criteria, setCriteria} = usePokemonData()
-
-
- 
-
-
- 
+  const {
+    finalResult,
+    loading,
+    filter,
+    search,
+    setSearch,
+    region,
+    setRegion,
+    criteria,
+    setCriteria,
+  } = usePokemonData()
 
   return (
     <div className="layout">
