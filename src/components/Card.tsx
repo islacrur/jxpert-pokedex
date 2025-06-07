@@ -17,7 +17,7 @@ import psychic from '../assets/psychic.svg'
 import rock from '../assets/rock.svg'
 import steel from '../assets/steel.svg'
 import water from '../assets/water.svg'
-import { CardContent } from './CardContent'
+import { CardContent } from '../components'
 
 type Icons = {
   [key: string]: string

@@ -1,5 +1,6 @@
 import React from 'react'
-import { CriteriaProgressBar } from './CriteriaProgressBar'
+import { CriteriaProgressBar } from '../components'
+
 type CardContentProps = {
   title: string
   stats: any

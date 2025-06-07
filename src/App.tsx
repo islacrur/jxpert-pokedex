@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Header } from './components/Header'
-import { Footer } from './components/Footer'
-import { Card } from './components/Card'
+import { Header, Footer, Card } from './components'
 
 const REGIONS = {
   kanto: { regionStart: 0, regionEnd: 151 },
