@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
-import{REGIONS, Region, Pokemon, PokemonsList, CRITERIA, Criteria} from '../appTypes'
+import{Region, Pokemon, CRITERIA} from '../appTypes'
 import{pokemonsService} from '../core/services/pokemonsService'
-
-
 
 function sortPokemon(
   pokemonData: Pokemon[],

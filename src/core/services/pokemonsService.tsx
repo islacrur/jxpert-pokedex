@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react'
-import{REGIONS, Region, Pokemon, PokemonsList, CRITERIA, Criteria} from '../../appTypes'
-
+import{REGIONS, Region, Pokemon, PokemonsList} from '../../appTypes'
 
 const getAllPokemons = async (region: Region) => {
   const activeRegion = REGIONS[region]
