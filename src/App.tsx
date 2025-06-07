@@ -1,144 +1,27 @@
 import { useEffect, useState } from 'react'
 import { Header, Footer, Card } from './components'
+import{REGIONS, Region, Pokemon, PokemonsList} from './appTypes'
+import{usePokemonData} from './hooks/usePokemonData'
 
-const REGIONS = {
-  kanto: { regionStart: 0, regionEnd: 151 },
-  johto: { regionStart: 151, regionEnd: 251 },
-  hoenn: { regionStart: 251, regionEnd: 386 },
-  sinnoh: { regionStart: 386, regionEnd: 494 },
-  unova: { regionStart: 494, regionEnd: 649 },
-  kalos: { regionStart: 649, regionEnd: 721 },
-  alola: { regionStart: 721, regionEnd: 809 },
-  galar: { regionStart: 809, regionEnd: 905 },
-  paldea: { regionStart: 905, regionEnd: 1025 },
-} as const
 
-type Criteria = {
-  [key: string]: string
-}
 
-const CRITERIA: Criteria = {
-  hp: 'hp',
-  attack: 'attack',
-  defense: 'defense',
-  specialAttack: 'special-attack',
-  specialDefense: 'special-defense',
-  speed: 'speed',
-  default: 'default',
-} as const
 
-type Region = keyof typeof REGIONS
 
-type PokemonsList = {
-  count: number
-  next: string
-  previous: null
-  results: {
-    name: string
-    url: string
-  }[]
-}
-
-type Stat = {
-  name: string
-  url: string
-}
-type Type = {
-  name: string
-  url: string
-}
-
-type Pokemon = {
-  id: number
-  name: string
-  types: {
-    type: Type
-  }[]
-  stats: {
-    base_stat: number
-    effort: number
-    stat: Stat
-  }[]
-}
-
-const pokemonData = async (region: Region) => {
-  const activeRegion = REGIONS[region]
-  const regionStart = activeRegion.regionStart
-  const regionEnd = activeRegion.regionEnd
-
-  const { results }: PokemonsList = await fetch(
-    `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
-  ).then((response) => response.json())
-
-  const result: Pokemon[] = await Promise.all(
-    results.map(
-      async ({ url }) => await fetch(url).then((response) => response.json()),
-    ),
-  )
-  return result
-}
-
-function sortPokemon(
-  pokemonData: Pokemon[],
-  criteria: keyof typeof CRITERIA | 'default',
-): Pokemon[] {
-  if (criteria === 'default') {
-    return [...pokemonData].sort((a, b) => a.id - b.id)
-  }
-
-  const statKey = CRITERIA[criteria]
-  if (!statKey) return pokemonData
-
-  return [...pokemonData].sort((a, b) => {
-    const aStat = a.stats.find((s) => s.stat.name === statKey)
-    const bStat = b.stats.find((s) => s.stat.name === statKey)
-    return (bStat?.base_stat ?? 0) - (aStat?.base_stat ?? 0)
-  })
-}
 
 export const App = () => {
-  const [cardsLoader, setCardsLoader] = useState<boolean>(false)
-  const [filter, setFilter] = useState<boolean>(false)
-  const [pokemons, setPokemons] = useState<any>([])
-  const [finalResult, setFinalResult] = useState<any>([])
-  const [search, setSearch] = useState<string>('')
-  const [region, setRegion] = useState<Region>('kanto')
+ 
+    const [showSort, setShowSort] = useState<boolean>(false) 
+
   const [showRegions, setShowRegions] = useState<boolean>(false)
-  const [showSort, setShowSort] = useState<boolean>(false)
-  const [criteria, setCriteria] = useState<string>('default')
 
-  useEffect(() => {
-    const uploadPokemonData = async () => {
-      setCardsLoader(true)
-      setFilter(true)
 
-      const result = await pokemonData(region)
+  const { pokemons, finalResult, loading, filter, search, setSearch, region, setRegion, criteria, setCriteria} = usePokemonData()
 
-      setPokemons(result)
-      setFinalResult(result)
-      setCardsLoader(false)
-    }
-    uploadPokemonData()
-  }, [region])
-  /**
-   * Filters results based on input query term.
-   */
-  useEffect(() => {
-    setFinalResult(
-      pokemons.filter(
-        (pokemon: Pokemon) =>
-          pokemon.name.includes(search.toLowerCase()) ||
-          !!pokemon.types.find((type) =>
-            type.type.name.startsWith(search.toLowerCase()),
-          ),
-      ),
-    )
-    setFilter(false)
-  }, [pokemons[0]?.id, search])
 
-  useEffect(() => {
-    setFinalResult((prev) => sortPokemon(prev, criteria))
-  }, [criteria])
+ 
+
+
+ 
 
   return (
     <div className="layout">
@@ -436,7 +319,7 @@ export const App = () => {
         </section>
 
         <section>
-          {(cardsLoader || filter) && (
+          {(loading || filter) && (
             <div className="grid" aria-hidden="true">
               {Array.from({ length: 6 }, (_, index) => {
                 return (
@@ -454,7 +337,7 @@ export const App = () => {
             </div>
           )}
           {/* Prints cards */}
-          {!filter && !cardsLoader && finalResult.length > 0 && (
+          {!filter && !loading && finalResult.length > 0 && (
             <ul className="grid">
               {finalResult.map((pokemon) => {
                 const customStyles: any = {
@@ -465,7 +348,7 @@ export const App = () => {
             </ul>
           )}
         </section>
-        {!cardsLoader && finalResult.length === 0 && (
+        {!loading && finalResult.length === 0 && (
           <p className="noresults">No results for "{search}"</p>
         )}
       </main>
