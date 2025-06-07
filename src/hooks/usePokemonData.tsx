@@ -1,23 +1,8 @@
 import { useEffect, useState } from 'react'
 import{REGIONS, Region, Pokemon, PokemonsList, CRITERIA, Criteria} from '../appTypes'
+import{pokemonsService} from '../core/services/pokemonsService'
 
 
-const pokemonData = async (region: Region) => {
-  const activeRegion = REGIONS[region]
-  const regionStart = activeRegion.regionStart
-  const regionEnd = activeRegion.regionEnd
-
-  const { results }: PokemonsList = await fetch(
-    `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
-  ).then((response) => response.json())
-
-  const result: Pokemon[] = await Promise.all(
-    results.map(
-      async ({ url }) => await fetch(url).then((response) => response.json()),
-    ),
-  )
-  return result
-}
 
 function sortPokemon(
   pokemonData: Pokemon[],
@@ -50,7 +35,7 @@ export const usePokemonData = () => {
     const uploadPokemonData = async () => {
       setCardsLoader(true)
       setFilter(true)
-      const result = await pokemonData(region)
+      const result = await pokemonsService.getAllPokemons(region);
       setPokemons(result)
       setFinalResult(result)
       setCardsLoader(false)
