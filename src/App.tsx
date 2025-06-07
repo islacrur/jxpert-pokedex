@@ -1,50 +1,7 @@
 import { useEffect, useState } from 'react'
-import bug from './assets/bug.svg'
-import dark from './assets/dark.svg'
-import dragon from './assets/dragon.svg'
-import electric from './assets/electric.svg'
-import fairy from './assets/fairy.svg'
-import fighting from './assets/fighting.svg'
-import fire from './assets/fire.svg'
-import flying from './assets/flying.svg'
-import ghost from './assets/ghost.svg'
-import grass from './assets/grass.svg'
-import ground from './assets/ground.svg'
-import ice from './assets/ice.svg'
-import normal from './assets/normal.svg'
-import poison from './assets/poison.svg'
-import psychic from './assets/psychic.svg'
-import rock from './assets/rock.svg'
-import steel from './assets/steel.svg'
-import water from './assets/water.svg'
-import { CriteriaProgressBar } from './components/CriteriaProgressBar'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
-
-type Icons = {
-  [key: string]: string
-}
-
-const icons: Icons = {
-  bug,
-  dark,
-  dragon,
-  electric,
-  fairy,
-  fighting,
-  fire,
-  flying,
-  ghost,
-  grass,
-  ground,
-  ice,
-  normal,
-  poison,
-  psychic,
-  rock,
-  steel,
-  water,
-}
+import { Card } from './components/Card'
 
 const REGIONS = {
   kanto: { regionStart: 0, regionEnd: 151 },
@@ -71,8 +28,6 @@ const CRITERIA: Criteria = {
   speed: 'speed',
   default: 'default',
 } as const
-
-// const STATS_MAX_VALUE: string = '255'
 
 type Region = keyof typeof REGIONS
 
@@ -507,69 +462,7 @@ export const App = () => {
                 const customStyles: any = {
                   '--color-type': `var(--color-${pokemon.types[0].type.name}`,
                 }
-                return (
-                  <li key={`pokemon-card-${pokemon.id}`}>
-                    <article className="card" style={customStyles}>
-                      <header className="card__head">
-                        <div className="card__tag">
-                          <p>#{pokemon.id.toString().padStart(3, '0')}</p>
-                        </div>
-                        <div className="card__tag">
-                          <img
-                            src={icons[pokemon.types[0].type.name]}
-                            className="card__type"
-                            alt={`${pokemon.types[0].type.name} primary type`}
-                          />
-                          {pokemon.types[1] && (
-                            <img
-                              src={icons[pokemon.types[1].type.name]}
-                              className="card__type"
-                              alt={`${pokemon.types[1].type.name} secondary type`}
-                            />
-                          )}
-                        </div>
-                      </header>
-                      <img
-                        className="card__avatar"
-                        src={
-                          pokemon.sprites.other['official-artwork']
-                            .front_default
-                        }
-                        loading="lazy"
-                        alt={`${pokemon.name} artwork`}
-                      />
-                      <section className="card__content">
-                        <h3 className="card__title">{pokemon.name}</h3>
-                        <ul aria-description="Stats resume">
-                          <CriteriaProgressBar
-                            statName="Hp"
-                            statValue={pokemon.stats[0].base_stat}
-                          />
-                          <CriteriaProgressBar
-                            statName="At"
-                            statValue={pokemon.stats[1].base_stat}
-                          />
-                          <CriteriaProgressBar
-                            statName="Df"
-                            statValue={pokemon.stats[2].base_stat}
-                          />
-                          <CriteriaProgressBar
-                            statName="SpA"
-                            statValue={pokemon.stats[3].base_stat}
-                          />
-                          <CriteriaProgressBar
-                            statName="SpD"
-                            statValue={pokemon.stats[4].base_stat}
-                          />
-                          <CriteriaProgressBar
-                            statName="Spd"
-                            statValue={pokemon.stats[5].base_stat}
-                          />
-                        </ul>
-                      </section>
-                    </article>
-                  </li>
-                )
+                return <Card pokemon={pokemon} customStyles={customStyles} />
               })}
             </ul>
           )}
