@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import{Region, Pokemon, CRITERIA} from '../appTypes'
-import{pokemonsService} from '../core/services/pokemonsService'
+import { Region, Pokemon, CRITERIA } from '../appTypes'
+import { PokemonService } from '../contextos/core/pokemon/service/PokemonService'
+import { ApiPokemonRepository } from '../contextos/core/pokemon/infrastructure/ApiPokemonRepository'
 
 function sortPokemon(
   pokemonData: Pokemon[],
@@ -33,7 +34,11 @@ export const usePokemonData = () => {
     const uploadPokemonData = async () => {
       setCardsLoader(true)
       setFilter(true)
-      const result = await pokemonsService.getAllPokemons(region);
+      let apiPokemonRepository = new ApiPokemonRepository()
+      let pokemonService = new PokemonService(apiPokemonRepository)
+
+      const result = await pokemonService.getAllPokemonsByRegion(region)
+      // const result = await pokemonsService.getAllPokemons(region);
       setPokemons(result)
       setFinalResult(result)
       setCardsLoader(false)
@@ -41,27 +46,36 @@ export const usePokemonData = () => {
     uploadPokemonData()
   }, [region])
 
-    /**
-     * Filters results based on input query term.
-     */
-    useEffect(() => {
-      setFinalResult(
-        pokemons.filter(
-          (pokemon: Pokemon) =>
-            pokemon.name.includes(search.toLowerCase()) ||
-            !!pokemon.types.find((type) =>
-              type.type.name.startsWith(search.toLowerCase()),
-            ),
-        ),
-      )
-      setFilter(false)
-    }, [pokemons[0]?.id, search])
+  /**
+   * Filters results based on input query term.
+   */
+  useEffect(() => {
+    setFinalResult(
+      pokemons.filter(
+        (pokemon: Pokemon) =>
+          pokemon.name.includes(search.toLowerCase()) ||
+          !!pokemon.types.find((type) =>
+            type.type.name.startsWith(search.toLowerCase()),
+          ),
+      ),
+    )
+    setFilter(false)
+  }, [pokemons[0]?.id, search])
 
-   useEffect(() => {
+  useEffect(() => {
     setFinalResult((prev) => sortPokemon(prev, criteria))
   }, [criteria])
 
-  return { pokemons,  finalResult, loading: cardsLoader , filter, search,
-     setSearch, region, setRegion, criteria, setCriteria}
-
+  return {
+    pokemons,
+    finalResult,
+    loading: cardsLoader,
+    filter,
+    search,
+    setSearch,
+    region,
+    setRegion,
+    criteria,
+    setCriteria,
+  }
 }
