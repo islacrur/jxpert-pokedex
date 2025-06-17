@@ -2,6 +2,7 @@ import { Region, REGIONS } from '../../../../appTypes'
 import { PokemonRepository } from '../domain/PokemonRepository'
 import { PokemonList } from '../domain/PokemonList'
 import { Pokemon } from '../domain/Pokemon'
+import { PokemonDTO } from '../domain/PokemonDTO'
 
 export class ApiPokemonRepository implements PokemonRepository {
   async getAllPokemonsByRegion(region: Region): Promise<Pokemon[]> {
@@ -13,11 +14,24 @@ export class ApiPokemonRepository implements PokemonRepository {
       `https://pokeapi.co/api/v2/pokemon?offset=${regionStart}&limit=${regionEnd}`,
     ).then((response) => response.json())
 
-    const result: Pokemon[] = await Promise.all(
+    // Definir interfaz del DTO: lo que devuelve la pokeapi
+    const pokemonsDTO: PokemonDTO[] = await Promise.all(
       results.map(
         async ({ url }) => await fetch(url).then((response) => response.json()),
       ),
     )
-    return result
+
+    return pokemonsDTO.map((pokemonDTO) => mapPokemonDTOToPokemon(pokemonDTO))
   }
+}
+
+const mapPokemonDTOToPokemon = (pokemonDTO: PokemonDTO): Pokemon => {
+  const pokemon: Pokemon = {
+    id: pokemonDTO.id,
+    name: pokemonDTO.name,
+    types: [],
+    stats: [],
+  }
+  console.log('===================>', pokemon)
+  return pokemon
 }
