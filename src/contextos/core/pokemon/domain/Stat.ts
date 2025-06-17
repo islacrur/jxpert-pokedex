@@ -6,3 +6,12 @@ export class Stat {
     private _effort: number,
   ) {}
 }
+
+export interface Stats {
+  hp: number
+  att: number
+  def: number
+  spA: number
+  spD: number
+  spd: number
+}
