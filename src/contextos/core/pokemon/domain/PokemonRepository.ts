@@ -1,5 +1,6 @@
-import { PokemonsList, Region } from '../../../../appTypes'
+import { Region } from '../../../../appTypes'
+import { Pokemon } from './Pokemon'
 
 export interface PokemonRepository {
-  getAllPokemonsByRegion(region: Region): PokemonsList
+  getAllPokemonsByRegion(region: Region): Promise<Pokemon[]>
 }
