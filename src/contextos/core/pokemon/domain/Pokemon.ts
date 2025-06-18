@@ -1,15 +1,10 @@
-import { Stats } from './Stat'
-import { Type } from './Type'
+import { Stat } from './Stat'
 
 export interface Pokemon {
-  id: number
-  name: string
-  types: {
-    type: Type
-  }[]
-  stats: {
-    base_stat: number
-    effort: number
-    stat: Stats
-  }[]
+  id:number;
+  name: string;
+  imageUrl: string;
+  primarytype:string
+  secondarytype:string
+  stats: Stat[];
 }
