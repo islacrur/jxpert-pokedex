@@ -1,8 +1,5 @@
 export class PokemonList {
   constructor(
-    // private _count: number,
-    // private _next: string,
-    // private _previous: null,
     public results: Result[],
   ) {}
 }
