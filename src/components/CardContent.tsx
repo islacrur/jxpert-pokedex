@@ -1,9 +1,10 @@
 import React from 'react'
 import { CriteriaProgressBar } from '../components'
+import { Stat } from '../contextos/core/pokemon/domain/Stat'
 
 type CardContentProps = {
   title: string
-  stats: any
+  stats: Stat[]
 }
 
 export const CardContent: React.FC<CardContentProps> = ({ title, stats }) => {
@@ -11,12 +12,12 @@ export const CardContent: React.FC<CardContentProps> = ({ title, stats }) => {
     <section className="card__content">
       <h3 className="card__title">{title}</h3>
       <ul aria-description="Stats resume">
-        <CriteriaProgressBar statName="Hp" statValue={stats[0].base_stat} />
-        <CriteriaProgressBar statName="At" statValue={stats[1].base_stat} />
-        <CriteriaProgressBar statName="Df" statValue={stats[2].base_stat} />
-        <CriteriaProgressBar statName="SpA" statValue={stats[3].base_stat} />
-        <CriteriaProgressBar statName="SpD" statValue={stats[4].base_stat} />
-        <CriteriaProgressBar statName="Spd" statValue={stats[5].base_stat} />
+        <CriteriaProgressBar statName="Hp" statValue={stats[0].baseValue} />
+        <CriteriaProgressBar statName="At" statValue={stats[1].baseValue} />
+        <CriteriaProgressBar statName="Df" statValue={stats[2].baseValue} />
+        <CriteriaProgressBar statName="SpA" statValue={stats[3].baseValue} />
+        <CriteriaProgressBar statName="SpD" statValue={stats[4].baseValue} />
+        <CriteriaProgressBar statName="Spd" statValue={stats[5].baseValue} />
       </ul>
     </section>
   )

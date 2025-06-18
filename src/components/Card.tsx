@@ -18,6 +18,9 @@ import rock from '../assets/rock.svg'
 import steel from '../assets/steel.svg'
 import water from '../assets/water.svg'
 import { CardContent } from '../components'
+import { Pokemon } from '../contextos/core/pokemon/domain/Pokemon'
+
+
 
 type Icons = {
   [key: string]: string
@@ -53,25 +56,7 @@ type Type = {
   url: string
 }
 
-type Pokemon = {
-  id: number
-  name: string
-  sprites: {
-    other: {
-      'official-artwork': {
-        front_default: string
-      }
-    }
-  }
-  types: {
-    type: Type
-  }[]
-  stats: {
-    base_stat: number
-    effort: number
-    stat: Stat
-  }[]
-}
+
 
 type CardProps = {
   pokemon: Pokemon
@@ -88,22 +73,22 @@ export const Card: React.FC<CardProps> = ({ pokemon, customStyles }) => {
             </div>
             <div className="card__tag">
               <img
-                src={icons[pokemon.types[0].type.name]}
+                src={icons[pokemon.primarytype]}
                 className="card__type"
-                alt={`${pokemon.types[0].type.name} primary type`}
+                alt={`${pokemon.primarytype} primary type`}
               />
-              {pokemon.types[1] && (
+              {pokemon.secondarytype && (
                 <img
-                  src={icons[pokemon.types[1].type.name]}
+                  src={icons[pokemon.secondarytype]}
                   className="card__type"
-                  alt={`${pokemon.types[1].type.name} secondary type`}
+                  alt={`${pokemon.secondarytype} secondary type`}
                 />
               )}
             </div>
           </header>
           <img
             className="card__avatar"
-            src={pokemon.sprites.other['official-artwork'].front_default}
+            src={pokemon.imageUrl}
             loading="lazy"
             alt={`${name} artwork`}
           />

@@ -1,4 +1,4 @@
-export class Stat {
+/*export class Stat {
   constructor(
     private _name: string,
     private _url: string,
@@ -14,4 +14,11 @@ export interface Stats {
   spA: number
   spD: number
   spd: number
+}*/
+
+export interface Stat {
+  name: string;
+  baseValue: number;
+  effort: number;
+  url: string;
 }

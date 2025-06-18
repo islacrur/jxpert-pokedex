@@ -207,7 +207,7 @@ export const App = () => {
             <ul className="grid">
               {finalResult.map((pokemon) => {
                 const customStyles: any = {
-                  '--color-type': `var(--color-${pokemon.types[0].type.name}`,
+                  '--color-type': `var(--color-${pokemon.primarytype}`,
                 }
                 return <Card pokemon={pokemon} customStyles={customStyles} />
               })}

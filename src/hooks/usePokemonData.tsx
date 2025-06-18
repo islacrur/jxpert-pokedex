@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Region, Pokemon, CRITERIA } from '../appTypes'
+import { Region, CRITERIA } from '../appTypes'
 import { PokemonService } from '../contextos/core/pokemon/service/PokemonService'
 import { ApiPokemonRepository } from '../contextos/core/pokemon/infrastructure/ApiPokemonRepository'
+import { Pokemon } from '../contextos/core/pokemon/domain/Pokemon'
 
 function sortPokemon(
   pokemonData: Pokemon[],
@@ -15,18 +16,18 @@ function sortPokemon(
   if (!statKey) return pokemonData
 
   return [...pokemonData].sort((a, b) => {
-    const aStat = a.stats.find((s) => s.stat.name === statKey)
-    const bStat = b.stats.find((s) => s.stat.name === statKey)
-    return (bStat?.base_stat ?? 0) - (aStat?.base_stat ?? 0)
+    const aStat = a.stats.find((s) => s.name === statKey)
+    const bStat = b.stats.find((s) => s.name === statKey)
+    return (bStat?.baseValue ?? 0) - (aStat?.baseValue ?? 0)
   })
 }
 
 export const usePokemonData = () => {
   const [cardsLoader, setCardsLoader] = useState<boolean>(false)
-  const [pokemons, setPokemons] = useState<any>([])
+  const [pokemons, setPokemons] = useState<Pokemon[]>([])
   const [region, setRegion] = useState<Region>('kanto')
   const [filter, setFilter] = useState<boolean>(false)
-  const [finalResult, setFinalResult] = useState<any>([])
+  const [finalResult, setFinalResult] = useState<Pokemon[]>([])
   const [search, setSearch] = useState<string>('')
   const [criteria, setCriteria] = useState<string>('default')
 
@@ -34,6 +35,7 @@ export const usePokemonData = () => {
     const uploadPokemonData = async () => {
       setCardsLoader(true)
       setFilter(true)
+      
       let apiPokemonRepository = new ApiPokemonRepository()
       let pokemonService = new PokemonService(apiPokemonRepository)
 
@@ -49,7 +51,7 @@ export const usePokemonData = () => {
   /**
    * Filters results based on input query term.
    */
-  useEffect(() => {
+    /**useEffect(() => {
     setFinalResult(
       pokemons.filter(
         (pokemon: Pokemon) =>
@@ -60,7 +62,18 @@ export const usePokemonData = () => {
       ),
     )
     setFilter(false)
-  }, [pokemons[0]?.id, search])
+  }, [pokemons[0]?.id, search])*/
+
+  useEffect(() => {
+  setFinalResult(
+    pokemons.filter((pokemon: Pokemon) =>
+      pokemon.name.toLowerCase().includes(search.toLowerCase()) ||
+      pokemon.primarytype.toLowerCase().startsWith(search.toLowerCase()) ||
+      pokemon.secondarytype.toLowerCase().startsWith(search.toLowerCase())
+    )
+  );
+  setFilter(false);
+}, [pokemons[0]?.id, search]);
 
   useEffect(() => {
     setFinalResult((prev) => sortPokemon(prev, criteria))
