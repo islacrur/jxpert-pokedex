@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@400;600&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;600&display=swap');
 
 :root {
   line-height: 1.5;
@@ -61,16 +61,16 @@
   --radius-xl: 1.5rem;
   --radius-2xl: 2rem;
 
-  --shadow-s: 0px 5px 10px -2px color-mix(in oklab, var(--color-accent), transparent
-          85%),
+  --shadow-s:
+    0px 5px 10px -2px color-mix(in oklab, var(--color-accent), transparent 85%),
     0px 2px 3px -1px color-mix(in oklab, var(--color-accent), transparent 93%);
 
-  --shadow-m: 0px 10px 15px -3px color-mix(in oklab, var(--color-accent), transparent
-          90%),
+  --shadow-m:
+    0px 10px 15px -3px color-mix(in oklab, var(--color-accent), transparent 90%),
     0px 4px 6px -2px color-mix(in oklab, var(--color-accent), transparent 95%);
 
-  --shadow-l: 0px 15px 20px -5px color-mix(in oklab, var(--color-accent), transparent
-          90%),
+  --shadow-l:
+    0px 15px 20px -5px color-mix(in oklab, var(--color-accent), transparent 90%),
     0px 6px 8px -3px color-mix(in oklab, var(--color-accent), transparent 95%);
 }
 
@@ -78,7 +78,7 @@
 *:before,
 *:after {
   box-sizing: border-box;
-  font-family: "Kanit", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Kanit', system-ui, Avenir, Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -224,7 +224,7 @@ button {
   }
 }
 
-.search:has(input[type="text"]:focus) {
+.search:has(input[type='text']:focus) {
   border-color: var(--color-accent);
 }
 
@@ -335,7 +335,7 @@ button {
 }
 
 .card:before {
-  content: "";
+  content: '';
 
   position: absolute;
   top: 0;
@@ -480,6 +480,22 @@ custom-progress::-ms-fill {
   font-weight: bold;
   text-transform: capitalize;
   letter-spacing: 1px;
+}
+
+.star-container {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-radius: 100%;
+}
+
+.star-container:hover {
+  background-color: grey;
+  border-radius: 100%;
 }
 
 .card__stat {
