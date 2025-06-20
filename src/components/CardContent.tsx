@@ -1,4 +1,6 @@
-import React from 'react'
+// import React,
+// { useState }
+//  from 'react'
 import { CriteriaProgressBar } from '../components'
 import { Stat } from '../contextos/core/pokemon/domain/Stat'
 import { Star } from 'lucide-react'
@@ -9,10 +11,15 @@ type CardContentProps = {
 }
 
 export const CardContent: React.FC<CardContentProps> = ({ title, stats }) => {
+  // const { favorito, setFavorito } = useState(false)
   return (
     <section className="card__content">
       <div className="star-container">
+        {/* {favorito ? ( */}
         <Star size={20} color="gold" fill="gold" />
+        {/* ) : (
+          <Star size={20} color="gold" />
+        )} */}
       </div>
       <h3 className="card__title">{title}</h3>
       <ul aria-description="Stats resume">
