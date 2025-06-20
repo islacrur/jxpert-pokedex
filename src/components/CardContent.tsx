@@ -1,6 +1,7 @@
 import React from 'react'
 import { CriteriaProgressBar } from '../components'
 import { Stat } from '../contextos/core/pokemon/domain/Stat'
+import { Star } from 'lucide-react'
 
 type CardContentProps = {
   title: string
@@ -10,6 +11,9 @@ type CardContentProps = {
 export const CardContent: React.FC<CardContentProps> = ({ title, stats }) => {
   return (
     <section className="card__content">
+      <div className="star-container">
+        <Star size={20} color="gold" fill="gold" />
+      </div>
       <h3 className="card__title">{title}</h3>
       <ul aria-description="Stats resume">
         <CriteriaProgressBar statName="Hp" statValue={stats[0].baseValue} />
